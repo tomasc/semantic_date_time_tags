@@ -26,6 +26,18 @@ $ gem install date_time_tags
 
 ## Usage
 
+In your views:
+
+```Ruby
+<%= date_tag(Date.today) %>
+```
+
+Will result in the following markup:
+
+```HTML
+<span></span>
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/tomasc/date_time_tags/fork )
