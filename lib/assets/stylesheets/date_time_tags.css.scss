@@ -1,75 +1,4 @@
-// span.dates {
-//   span.date {
-//     &:after { content: ' '; }
-//   }
-//   span.date_range {
-//     &:after { content: '  '; }
-//   }
-//   span.year.current {
-//     display: none;
-//   }
-//   span.separator {
-//     &:before { content: ' '; }
-//     &:after { content: ' '; }
-//   }
-
-//   span.date_time.from {
-//     &:after {
-//       content: ' ';
-//     }
-//   }
-
-//   span.date_range.same_year {
-//     span.date_time.from {
-//       span.year {
-//         display: none;
-//       }
-//     }
-//   }
-
-//   span.date_range.same_month {
-//     span.date_time.from {
-//       span.month {
-//         display: none;
-//       }
-//     }
-//   }
-
-//   span.date_range.same_day {
-//     span.date_time.from {
-//       span.day,
-//       span.month {
-//         display: inline;
-//       }
-//     }
-//     span.date_time.to {
-//       span.day,
-//       span.month {
-//         display: none;
-//       }
-//     }
-//   }
-
-//   span.date_range.same_year.same_month {
-//     &:not(.all_day) {
-//       span.date_time.from {
-//         span.date.from {
-//           span.month {
-//             display: inline;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   span.date_range.date_only.same_year.same_month.same_day {
-//     span.separator {
-//       display: none;
-//     }
-//   }
-// }
-
 span.date_range {
-  color: blue;
 
   time.date.end {}
 
@@ -86,8 +15,4 @@ span.date_range {
       display: none;
     }
   }
-}
-
-span.event_type {
-  text-transform: lowercase;
 }

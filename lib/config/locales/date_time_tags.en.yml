@@ -1,0 +1,10 @@
+en:
+  date:
+    formats:
+      full: "%-d.%-m.%Y"
+  time:
+    formats:
+      full: "%H:%M"
+  date_time:
+    formats:
+      full: "%-d.%-m.%Y"

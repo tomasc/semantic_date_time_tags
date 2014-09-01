@@ -14,15 +14,18 @@ module DateTimeTags
     # ---------------------------------------------------------------------
 
     def translations
-      I18n.backend.send(:init_translations) unless I18n.backend.initialized?
       I18n.backend.send(:translations)[I18n.locale]
     end
 
     # ---------------------------------------------------------------------
 
-    def date_range_tag date_from, date_to
+    def date_format
+      translations.fetch(:date)[:formats][:full].to_s
+    end
+
+    def date_range_tag date_from, date_to, options={}
       date_range = DateRange.new(date_from, date_to)
-      separator = translations[:date_range][:separator].to_s
+      separator = options.fetch(:separator, ' – ')
       content_tag(:span, class: [
         'date_range',
         ('same_year' unless date_range.spans_years?),
@@ -40,12 +43,11 @@ module DateTimeTags
 
     # ---------------------------------------------------------------------
 
-    def date_time_tag date_time, all_day=false, cls=nil
+    def date_time_tag date_time, all_day=false, options={}
       return unless [Time,DateTime].any? {|c| date_time.instance_of? c}
-      separator = translations[:date_time][:separator].to_s
-      time_tag(date_time, class: date_classes(date_time, cls, 'date_time')) do
+      time_tag(date_time, { class: [dom_classes(date_time), options[:class]].reject(&:blank?).join(' ') }) do
         [
-          date_tag(date_time.to_date, cls, :span),
+          date_tag(date_time.to_date, :span, options),
           content_tag(:span, separator, class: 'date_time_separator'),
           time_tags(date_time, :span)
         ].join.html_safe
@@ -54,29 +56,30 @@ module DateTimeTags
 
     # ---------------------------------------------------------------------
 
-    def date_tag date, cls=nil, tag_name=:time
-      return unless [Date,DateTime].any? {|c| date.instance_of? c}
-      format = translations[:date][:formats][:full_date].to_s
-      localized_date = I18n.l(date, format: :full_date)
-      options = { class: date_classes(date, cls, 'date') }
+    def date_tag date, tag_name=:time, options={}
+      return unless [Date, DateTime].any? { |c| date.instance_of? c }
+      localized_date = I18n.l(date, format: :full)
       if tag_name == :time
         datetime = date.acts_like?(:time) ? date.xmlschema : date.iso8601
         options[:datetime] = datetime
       end
-      content_tag(tag_name, options) do
-        markup_localized_date_or_time_string(localized_date, format).html_safe
+      content_tag(tag_name, { class: [dom_classes(date), options[:class]].reject(&:blank?).join(' ') }) do
+        markup_localized_date_or_time_string(localized_date, date_format).html_safe
       end.html_safe
     end
 
     # ---------------------------------------------------------------------
 
+    def time_format
+      translations.fetch(:time, {}[:formats][:full]).to_s
+    end
+
     def time_tags time, tag_name=:time
-      return unless [Time,DateTime].any? {|c| time.instance_of? c}
-      format = translations[:time][:formats][:full_time].to_s
-      separator = translations[:time][:separator].to_s
-      localized_time = I18n.l(time, format: :full_time)
+      return unless [Time, DateTime].any? { |c| time.instance_of? c }
+      return unless time_format.present?
+      localized_time = I18n.l(time, format: :full)
       content_tag(tag_name, class: time_classes(time)) do
-        markup_localized_date_or_time_string(localized_time, format).html_safe
+        markup_localized_date_or_time_string(localized_time, time_format).html_safe
       end.html_safe
     end
 
@@ -117,19 +120,52 @@ module DateTimeTags
 
     # ---------------------------------------------------------------------
 
-    def date_classes date, cls, type
-      classes = [type]
-      classes.push cls unless cls.nil?
-      classes.push 'current_date' if date.today?
-      classes.push 'current_year' if date.year == Date.today.year
-      classes
+    def dom_classes date_or_time
+      DomClasses.new(date_or_time).to_s
     end
 
-    def time_classes time
-      classes = ['time']
-      classes.push 'whole_hour' unless time.min > 0
-      classes.push 'whole_minute' unless time.sec > 0
-      classes
+    # ---------------------------------------------------------------------
+
+    class DomClasses
+
+      def initialize date_or_time
+        @date_or_time = date_or_time
+        @res = []
+
+        @res << type_class
+        @res << current_date_class
+        @res << current_year_class
+        @res << whole_hour_class
+        @res << whole_minute_class
+      end
+
+      def to_s
+        @res.reject(&:blank?).join(' ')
+      end
+
+      def type_class
+        @date_or_time.class.to_s.underscore
+      end
+
+      def current_date_class
+        return unless [Date,DateTime].any? {|c| @date_or_time.instance_of? c}
+        'current_date' if @date_or_time.today?
+      end
+
+      def current_year_class
+        return unless [Date,DateTime].any? {|c| @date_or_time.instance_of? c}
+        'current_year' if @date_or_time.year == Date.today.year
+      end
+
+      def whole_hour_class
+        return unless [Time,DateTime].any? {|c| @date_or_time.instance_of? c}
+        'whole_hour' unless @date_or_time.min > 0
+      end
+
+      def whole_minute_class
+        return unless [Time,DateTime].any? {|c| @date_or_time.instance_of? c}
+        'whole_minute' unless @date_or_time.sec > 0
+      end
     end
 
     # ---------------------------------------------------------------------
