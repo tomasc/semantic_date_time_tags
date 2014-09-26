@@ -1,7 +1,4 @@
 span.date_range {
-
-  time.date.end {}
-
   &.same_year {
     time.date.from {
       span.year {
@@ -10,7 +7,19 @@ span.date_range {
     }
   }
 
+  &.same_year.same_month {
+    time.date.from {
+      span.month {
+        display: none;
+      }
+      span.month + span.sep {
+        display: none;
+      }
+    }
+  }
+
   &.same_day {
+    time.date.from,
     span.date_range_separator {
       display: none;
     }
