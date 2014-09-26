@@ -42,7 +42,7 @@ In your views:
 Will result in the following markup:
 
 ```HTML
-<time class="date current_date current_year">
+<time class="date current_date current_year" datetime="2014-09-26">
   <span class="day d">26</span><span class="sep">.</span><span class="month m">9</span><span class="sep">.</span><span class="year Y">2014</span>
 </time>
 ```

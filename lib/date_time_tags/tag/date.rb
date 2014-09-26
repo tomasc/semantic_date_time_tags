@@ -23,7 +23,9 @@ module DateTimeTags
           @options[:datetime] = datetime
         end
 
-        content_tag(@tag_name, { class: dom_classes }, @options) do
+        @options[:class] = dom_classes
+
+        content_tag(@tag_name, @options) do
           DateTimeTags::FormatParser.new(format, localized_obj).to_html.html_safe
         end.html_safe
       end
