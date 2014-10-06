@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    date_time_tags (0.0.2)
+    semantic_date_time_tags (0.0.1)
       rails (>= 4.1.0)
 
 GEM
@@ -117,8 +117,8 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.6)
-  date_time_tags!
   guard
   guard-minitest
   minitest
   rake
+  semantic_date_time_tags!

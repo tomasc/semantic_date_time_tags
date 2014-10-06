@@ -1,7 +1,7 @@
 require 'action_view'
 require 'i18n'
 
-module DateTimeTags
+module SemanticDateTimeTags
   class Tag
 
     include ActionView::Helpers::DateHelper
@@ -37,6 +37,7 @@ module DateTimeTags
 
     def dom_classes
       [
+        'semantic',
         type_class,
         current_date_class,
         current_year_class,

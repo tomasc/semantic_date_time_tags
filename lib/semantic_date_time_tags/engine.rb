@@ -1,6 +1,6 @@
 require 'rails/engine'
 
-module DateTimeTags
+module SemanticDateTimeTags
   module Rails
     class Engine < ::Rails::Engine
     end

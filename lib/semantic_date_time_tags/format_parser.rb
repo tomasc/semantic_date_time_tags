@@ -1,6 +1,6 @@
 require 'action_view'
 
-module DateTimeTags
+module SemanticDateTimeTags
   class FormatParser
 
     include ActionView::Helpers::TagHelper

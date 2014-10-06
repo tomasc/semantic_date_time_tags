@@ -1,4 +1,4 @@
-module DateTimeTags
+module SemanticDateTimeTags
   class Tag
     class DateRange < Tag
 
@@ -45,9 +45,9 @@ module DateTimeTags
         separator = @options.fetch(:separator, ' – ')
         content_tag(:span, class: dom_classes) do
           [
-            DateTimeTags::Tag::Date.new(@date_from, :time, class: 'from').to_html,
+            SemanticDateTimeTags::Tag::Date.new(@date_from, :time, class: 'from').to_html,
             content_tag(:span, separator, class: 'date_range_separator'),
-            DateTimeTags::Tag::Date.new(@date_to, :time, class: 'to').to_html
+            SemanticDateTimeTags::Tag::Date.new(@date_to, :time, class: 'to').to_html
           ].join.html_safe
         end.html_safe
       end

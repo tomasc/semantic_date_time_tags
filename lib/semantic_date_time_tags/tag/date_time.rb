@@ -1,6 +1,6 @@
 require_relative '../format_parser'
 
-module DateTimeTags
+module SemanticDateTimeTags
   class Tag
     class DateTime < Tag
 
@@ -25,7 +25,7 @@ module DateTimeTags
 
       def to_html
         time_tag(@obj, { class: dom_classes }) do
-          DateTimeTags::FormatParser.new(format, localized_obj).to_html.html_safe
+          SemanticDateTimeTags::FormatParser.new(format, localized_obj).to_html.html_safe
         end.html_safe
       end
 
