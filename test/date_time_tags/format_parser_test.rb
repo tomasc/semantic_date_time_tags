@@ -1,7 +1,7 @@
-require 'date_time_tags/format_parser'
+require 'semantic_date_time_tags/format_parser'
 require 'test_helper'
 
-module DateTimeTags
+module SemanticDateTimeTags
   describe FormatParser do
 
     describe '#to_html' do
