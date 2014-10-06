@@ -1,7 +1,7 @@
 require 'test_helper'
-require 'date_time_tags/view_helpers'
+require 'semantic_date_time_tags/view_helpers'
 
-module DateTimeTags
+module SemanticDateTimeTags
   describe ViewHelpers do
 
     include ViewHelpers
@@ -26,31 +26,31 @@ module DateTimeTags
       let(:time_object_whole_minute) { Time.new(2014, 8, 21, 15, 30) }
 
       it 'does not work with a date object' do
-        proc { time_tags(date_object) }.must_raise RuntimeError
+        proc { semantic_time_tag(date_object) }.must_raise RuntimeError
       end
 
       it 'returns hours wrapped in a span tag' do
-        time_tags(time_object).must_match Regexp.new(".*?<span class=\"hours H\">#{time_object_hours}</span>.*?")
+        semantic_time_tag(time_object).must_match Regexp.new(".*?<span class=\"hours H\">#{time_object_hours}</span>.*?")
       end
 
       it 'returns minutes wrapped in a span tag' do
-        time_tags(time_object).must_match Regexp.new(".*?<span class=\"minutes M\">#{time_object_minutes}</span>.*?")
+        semantic_time_tag(time_object).must_match Regexp.new(".*?<span class=\"minutes M\">#{time_object_minutes}</span>.*?")
       end
 
       it 'wraps the whole thing in a time tag by default' do
-        time_tags(time_object).must_match Regexp.new("\\A<time.*?>.*?</time>\\z")
+        semantic_time_tag(time_object).must_match Regexp.new("\\A<time.*?>.*?</time>\\z")
       end
 
       it 'wraps the whole thing in a span tag if passed as argument' do
-        time_tags(time_object, :span).must_match Regexp.new("\\A<span.*?>.*?</span>\\z")
+        semantic_time_tag(time_object, :span).must_match Regexp.new("\\A<span.*?>.*?</span>\\z")
       end
 
       it 'adds whole_hour class if time is whole hour' do
-        time_tags(time_object_whole_hour).must_match Regexp.new("\\A<time.*? class=\".*?whole_hour.*?\">.*?</time>\\z")
+        semantic_time_tag(time_object_whole_hour).must_match Regexp.new("\\A<time.*? class=\".*?whole_hour.*?\">.*?</time>\\z")
       end
 
       it 'adds whole_minute class if time is whole minute' do
-        time_tags(time_object_whole_minute).must_match Regexp.new("\\A<time.*? class=\".*?whole_minute.*?\">.*?</time>\\z")
+        semantic_time_tag(time_object_whole_minute).must_match Regexp.new("\\A<time.*? class=\".*?whole_minute.*?\">.*?</time>\\z")
       end
     end
 
