@@ -8,3 +8,8 @@ require 'semantic_date_time_tags'
 require 'rubygems'
 
 I18n.backend.send(:init_translations)
+
+if ENV["CI"]
+  require "coveralls"
+  Coveralls.wear!
+end
