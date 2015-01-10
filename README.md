@@ -34,6 +34,8 @@ span.date_range.semantic.same_year {
 }
 ```
 
+See the included [SCSS example](/lib/assets/stylesheets/semantic_date_time_tags.css.scss) for more.
+
 ## Installation
 
 Add this line to your application's Gemfile:
