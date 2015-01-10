@@ -4,6 +4,36 @@
 
 Set of Rails helpers that mark up Date, DateTime instances and their ranges with sensible combination of (html5) tags, data attributes and CSS classes so that their display can be easily controlled via CSS.
 
+This allows, for example, highlighting today's dates:
+
+```css
+time.date.semantic.current_date {
+  background-color: yellow;
+}
+```
+
+Hiding current year via CSS:
+
+```css
+time.date.semantic.current_year {
+  span.year {
+    display: none;
+  }
+}
+```
+
+Or, in the case of date ranges, avoiding repetition of year in both dates:
+
+```css
+span.date_range.semantic.same_year {
+  time.date.semantic.from {
+    span.year {
+      display: none;
+    }
+  }
+}
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
