@@ -4,6 +4,8 @@
 
 Set of Rails helpers that mark up Date, DateTime instances and their ranges with sensible combination of (html5) tags, data attributes and CSS classes so that their display can be easily controlled via CSS.
 
+The generated markup takes into account Date/Time formats as specified in the [I18n localizations](http://guides.rubyonrails.org/i18n.html#adding-date-time-formats).
+
 This allows, for example, highlighting today's dates:
 
 ```css
