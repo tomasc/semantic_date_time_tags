@@ -24,7 +24,7 @@ module SemanticDateTimeTags
     # ---------------------------------------------------------------------
 
     def translations
-      I18n.backend.send(:translations)[I18n.locale]
+      I18n.t(".")
     end
 
     # ---------------------------------------------------------------------
