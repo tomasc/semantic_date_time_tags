@@ -34,5 +34,14 @@ describe SemanticDateTimeTags::FormatParser do
         to_html.must_equal '<span class="hours I">10</span><span class="sep">.</span><span class="minutes M">00</span><span class="sep"> </span><span class="ampm p">AM</span>'
       end
     end
+
+    describe 'A d / m / Y' do
+      let(:format) { '%A %d / %m / %Y' }
+      let(:string) { 'Saturday 12 / 12 / 2014' }
+
+      it 'wraps the components into span tags' do
+        to_html.must_equal '<span class="day A">Saturday</span><span class="sep"> </span><span class="day d">12</span><span class="sep"> / </span><span class="month m">12</span><span class="sep"> / </span><span class="year Y">2014</span>'
+      end
+    end
   end
 end
