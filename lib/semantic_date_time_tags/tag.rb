@@ -15,6 +15,7 @@ module SemanticDateTimeTags
       @obj = obj
       @tag_name = tag_name
       @options = options
+      @scope = @options.fetch(:scope, nil)
     end
 
     def to_html
@@ -30,7 +31,7 @@ module SemanticDateTimeTags
     # ---------------------------------------------------------------------
 
     def localized_obj
-      I18n.l(@obj, format: :full)
+      I18n.l(@obj, format: :full, scope: @scope)
     end
 
     # ---------------------------------------------------------------------
