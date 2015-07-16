@@ -14,8 +14,8 @@ module SemanticDateTimeTags
     def initialize obj, tag_name, options={}
       @obj = obj
       @tag_name = tag_name
-      @options = options
-      @scope = @options.fetch(:scope, nil)
+      @options = options.tap{ |opts| opts.delete(:scope) }
+      @scope = options.fetch(:scope, nil)
     end
 
     def to_html
