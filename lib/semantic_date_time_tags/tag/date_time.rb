@@ -24,7 +24,14 @@ module SemanticDateTimeTags
       # ---------------------------------------------------------------------
 
       def to_html
-        time_tag(@obj, { class: dom_classes }) do
+        if @tag_name == :time
+          datetime = @obj.acts_like?(:time) ? @obj.xmlschema : @obj.iso8601
+          @options[:datetime] = datetime
+        end
+
+        @options[:class] = dom_classes
+
+        time_tag(@obj, @options) do
           SemanticDateTimeTags::FormatParser.new(format, localized_obj).to_html.html_safe
         end.html_safe
       end
