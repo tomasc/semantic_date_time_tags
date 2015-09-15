@@ -11,12 +11,6 @@ module SemanticDateTimeTags
 
       # ---------------------------------------------------------------------
 
-      def format
-        translations.fetch(:time)[:formats][:full].to_s
-      end
-
-      # ---------------------------------------------------------------------
-
       def to_html
         if @tag_name == :time
           datetime = @obj.acts_like?(:time) ? @obj.xmlschema : @obj.iso8601
@@ -25,9 +19,15 @@ module SemanticDateTimeTags
 
         @options[:class] = dom_classes
 
-        content_tag(@tag_name, @options) do
-          SemanticDateTimeTags::FormatParser.new(format, localized_obj).to_html
-        end.html_safe
+        value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html
+
+        content_tag(@tag_name, @options) { value }.html_safe
+      end
+
+      private # =============================================================
+
+      def scope
+        'time.formats'
       end
 
     end

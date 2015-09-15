@@ -2,9 +2,12 @@ en:
   date:
     formats:
       full: "%-d.%-m.%Y"
+      test: "%-d~%-m~%Y"
   time:
     formats:
       full: "%H:%M"
+      test: "%H~%M"
   date_time:
     formats:
       full: "%-d.%-m.%Y %H:%M"
+      test: "%-d~%-m~%Y %H~%M"

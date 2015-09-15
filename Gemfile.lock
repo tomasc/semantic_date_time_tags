@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    semantic_date_time_tags (0.0.7)
+    semantic_date_time_tags (0.0.8)
       rails (>= 3.0.0)
 
 GEM

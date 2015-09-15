@@ -44,6 +44,10 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'adds whole_minute class if time is whole minute' do
       semantic_time_tag(time_object_whole_minute).must_match Regexp.new("\\A<time.*? class=\".*?whole_minute.*?\">.*?</time>\\z")
     end
+
+    it 'allows to pass :format' do
+      semantic_time_tag(time_object, :time, format: :test).must_include '~'
+    end
   end
 
   # ---------------------------------------------------------------------
@@ -83,6 +87,9 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_tag(date_object_last_year).wont_include "current_year"
     end
 
+    it 'allows to pass :format' do
+      semantic_date_tag(date_object, :time, format: :test).must_include '~'
+    end
   end
 
   # ---------------------------------------------------------------------
@@ -94,6 +101,10 @@ describe SemanticDateTimeTags::ViewHelpers do
 
     it 'wraps the whole thing in a time tag' do
       semantic_date_time_tag(date_time_object).must_match Regexp.new("\\A<time.*?>.*?</time>\\z")
+    end
+
+    it 'allows to pass :format' do
+      semantic_date_time_tag(date_time_object, false, format: :test).must_include '~'
     end
   end
 

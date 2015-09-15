@@ -4,21 +4,9 @@ module SemanticDateTimeTags
   class Tag
     class DateTime < Tag
 
-      def initialize obj, tag_name, options={}
+      def initialize obj, options={}
         raise 'object must be DateTime' unless obj.instance_of?(::DateTime)
-        super(obj, options)
-      end
-
-      # ---------------------------------------------------------------------
-
-      def localized_obj
-        @obj.strftime(I18n.t(:"date_time.formats.full", { locale: I18n.locale }))
-      end
-
-      # ---------------------------------------------------------------------
-
-      def format
-        translations.fetch(:date_time)[:formats][:full].to_s
+        super(obj, :time, options)
       end
 
       # ---------------------------------------------------------------------
@@ -31,9 +19,19 @@ module SemanticDateTimeTags
 
         @options[:class] = dom_classes
 
-        time_tag(@obj, @options) do
-          SemanticDateTimeTags::FormatParser.new(format, localized_obj).to_html.html_safe
-        end.html_safe
+        value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
+
+        time_tag(@obj, @options) { value }.html_safe
+      end
+
+      private # =============================================================
+
+      def scope
+        'date_time.formats'
+      end
+
+      def localized_obj
+        @obj.strftime I18n.t( format, scope: scope, locale: I18n.locale )
       end
 
     end

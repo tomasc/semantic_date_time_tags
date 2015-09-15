@@ -42,14 +42,17 @@ module SemanticDateTimeTags
       # ---------------------------------------------------------------------
 
       def to_html
-        separator = @options.fetch(:separator, ' – ')
-        content_tag(:span, class: dom_classes) do
-          [
-            SemanticDateTimeTags::Tag::Date.new(@date_from, :time, class: 'from').to_html,
-            content_tag(:span, separator, class: 'date_range_separator'),
-            SemanticDateTimeTags::Tag::Date.new(@date_to, :time, class: 'to').to_html
-          ].join.html_safe
-        end.html_safe
+        from = SemanticDateTimeTags::Tag::Date.new(@date_from, :time, class: 'from').to_html
+        sep = content_tag(:span, separator, class: 'date_range_separator')
+        to = SemanticDateTimeTags::Tag::Date.new(@date_to, :time, class: 'to').to_html
+
+        content_tag(:span, class: dom_classes) { [ from, sep, to ].join.html_safe }.html_safe
+      end
+
+      private # =============================================================
+
+      def separator
+        @options.fetch(:separator, ' – ')
       end
 
     end

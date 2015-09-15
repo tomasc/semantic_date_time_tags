@@ -7,31 +7,20 @@ module SemanticDateTimeTags
     include ActionView::Helpers::DateHelper
     include ActionView::Helpers::TagHelper
 
-    # =====================================================================
-
     attr_accessor :output_buffer
+
+    # =====================================================================
 
     def initialize obj, tag_name, options={}
       @obj = obj
       @tag_name = tag_name
       @options = options.tap{ |opts| opts.delete(:scope) }
-      @scope = options.fetch(:scope, nil)
     end
+
+    # ---------------------------------------------------------------------
 
     def to_html
-      raise 'Should be implemented by a subclass'
-    end
-
-    # ---------------------------------------------------------------------
-
-    def translations
-      I18n.t(".")
-    end
-
-    # ---------------------------------------------------------------------
-
-    def localized_obj
-      I18n.l(@obj, format: :full, scope: @scope)
+      raise NotImplementedError
     end
 
     # ---------------------------------------------------------------------
@@ -45,7 +34,7 @@ module SemanticDateTimeTags
         whole_hour_class,
         whole_minute_class,
         @options[:class]
-      ].reject(&:blank?)
+      ].flatten.reject(&:blank?)
     end
 
     def type_class
@@ -53,23 +42,37 @@ module SemanticDateTimeTags
     end
 
     def current_date_class
-      return unless [::Date,::DateTime].any? {|c| @obj.instance_of? c}
+      return unless [::Date,::DateTime].any?{ |c| @obj.instance_of? c }
       'current_date' if @obj.today?
     end
 
     def current_year_class
-      return unless [::Date,::DateTime].any? {|c| @obj.instance_of? c}
+      return unless [::Date,::DateTime].any?{ |c| @obj.instance_of? c }
       'current_year' if @obj.year == ::Date.today.year
     end
 
     def whole_hour_class
-      return unless [::Time,::DateTime].any? {|c| @obj.instance_of? c}
+      return unless [::Time,::DateTime].any?{ |c| @obj.instance_of? c }
       'whole_hour' unless @obj.min > 0
     end
 
     def whole_minute_class
-      return unless [::Time,::DateTime].any? {|c| @obj.instance_of? c}
+      return unless [::Time,::DateTime].any?{ |c| @obj.instance_of? c }
       'whole_minute' unless @obj.sec > 0
+    end
+
+    private # =============================================================
+
+    def format_string
+      I18n.t(scope)[format]
+    end
+
+    def format
+      @options.fetch :format, :full
+    end
+
+    def localized_obj
+      I18n.l @obj, format: format
     end
 
   end

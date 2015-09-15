@@ -1,26 +1,18 @@
 require 'action_view'
 
 module SemanticDateTimeTags
-  class FormatParser
+  class FormatParser < Struct.new :format, :str
 
     include ActionView::Helpers::TagHelper
 
-    # ---------------------------------------------------------------------
-
-    def initialize format, str
-      @format = format
-      @str = str
-    end
-
-    # ---------------------------------------------------------------------
-
     def to_html
-      processed_str = @str
+      processed_str = str
       formatting_components.flatten.inject('') do |res, comp|
         regexp = Regexp.new(get_regexp_for_component(comp))
-        match = processed_str.match(regexp)[0]
-        res += get_tag_for_match(match, comp)
-        processed_str = processed_str[match.length..-1]
+        if match = processed_str.match(regexp)
+          res += get_tag_for_match(match[0], comp)
+          processed_str = processed_str[match[0].length..-1]
+        end
         res
       end.html_safe
     end
@@ -28,11 +20,11 @@ module SemanticDateTimeTags
     private # =============================================================
 
     def formatting_components
-      @format.scan /(%-?\w|.+?(?=%))/
+      format.scan /(%-?\w|.+?(?=%))/
     end
 
     def get_tag_for_match match, comp
-      content_tag(:span, match, class: get_classes_for_component(comp))
+      content_tag :span, match, class: get_classes_for_component(comp)
     end
 
     def get_regexp_for_component comp
