@@ -38,7 +38,7 @@ module SemanticDateTimeTags
       case comp
       when /%-?[YCy]/ then ['year', comp[/\w/]]
       when /%-?[mBbh]/ then ['month', comp[/\w/]]
-      when /%-?[Adej]/ then ['day', comp[/\w/]]
+      when /%-?[aAdej]/ then ['day', comp[/\w/]]
       when /%-?[HKIl]/ then ['hours', comp[/\w/]]
       when /%-?[M]/ then ['minutes', comp[/\w/]]
       when /%-?[p]/ then ['ampm', comp[/\w/]]

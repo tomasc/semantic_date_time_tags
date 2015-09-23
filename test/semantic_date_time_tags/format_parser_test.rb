@@ -35,6 +35,15 @@ describe SemanticDateTimeTags::FormatParser do
       end
     end
 
+    describe 'd / m / Y' do
+      let(:format) { '%a, %b %e, %Y' }
+      let(:string) { 'Sun, Jan 1, 2015' }
+
+      it 'wraps the components into span tags' do
+        to_html.must_equal '<span class="day a">Sun</span><span class="sep">, </span><span class="month b">Jan</span><span class="sep"> </span><span class="day e">1</span><span class="sep">, </span><span class="year Y">2015</span>'
+      end
+    end
+
     describe 'A d / m / Y' do
       let(:format) { '%A %d / %m / %Y' }
       let(:string) { 'Saturday 12 / 12 / 2014' }
