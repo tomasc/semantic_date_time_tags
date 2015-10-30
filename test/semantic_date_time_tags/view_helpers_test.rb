@@ -56,8 +56,6 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:date_object_day) { date_object.strftime('%-d') }
     let(:date_object_month) { date_object.strftime('%-m') }
     let(:date_object_year) { date_object.year }
-    let(:date_object_yesterday) { Date.yesterday }
-    let(:date_object_last_year) { Date.civil( date_object.year-1, date_object.month, date_object.day ) }
 
     it 'should only work with a date or datetime object' do
       proc { semantic_date_tag(time_object) }.must_raise RuntimeError
@@ -78,17 +76,17 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'adds current_date class if date is today' do
-      semantic_date_tag(date_object).must_include "current_date"
-      semantic_date_tag(date_object_yesterday).wont_include "current_date"
+      semantic_date_tag(Date.today).must_include "current_date"
+      semantic_date_tag(Date.today-1.day).wont_include "current_date"
     end
 
     it 'adds current class to year span if date is this year' do
-      semantic_date_tag(date_object).must_include "current_year"
-      semantic_date_tag(date_object_last_year).wont_include "current_year"
+      semantic_date_tag(Date.today).must_include "current_year"
+      semantic_date_tag(Date.today-1.year).wont_include "current_year"
     end
 
     it 'allows to pass :format' do
-      semantic_date_tag(date_object, :time, format: :test).must_include '~'
+      semantic_date_tag(Date.today, :time, format: :test).must_include '~'
     end
   end
 
