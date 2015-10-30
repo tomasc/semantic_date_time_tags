@@ -4,10 +4,10 @@ require 'semantic_date_time_tags/view_helpers'
 describe SemanticDateTimeTags::ViewHelpers do
   include SemanticDateTimeTags::ViewHelpers
 
-  let(:time_object) { Time.now }
-  let(:date_object) { Date.today }
-  let(:date_tomorrow_object) { Date.tomorrow }
-  let(:date_time_object) { DateTime.now }
+  let(:time_object) { Time.parse('31/10/2015') }
+  let(:date_object) { Date.parse('31/10/2015') }
+  let(:date_tomorrow_object) { Date.parse('31/10/2015')+1.day }
+  let(:date_time_object) { DateTime.parse('31/10/2015') }
 
   # ---------------------------------------------------------------------
 
