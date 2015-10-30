@@ -27,12 +27,18 @@ module SemanticDateTimeTags
         @date_from == @date_to
       end
 
+      def both_in_current_year?
+        return false if spans_years?
+        @date_from.year == ::Date.today.year
+      end
+
       # ---------------------------------------------------------------------
 
       def dom_classes
         res = []
         res << 'date_range'
         res << 'same_year' unless spans_years?
+        res << 'current_year' if both_in_current_year?
         res << 'same_month' unless spans_months?
         res << 'more_than_a_week' unless within_a_week?
         res << 'same_day' if one_day?

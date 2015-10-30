@@ -114,5 +114,10 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'returns the from date wrapped correctly' do
       semantic_date_range_tag(date_object, date_tomorrow_object).must_match Regexp.new("<time class=\"semantic date current_date current_year from\".*?>.*?</time>")
     end
+
+    it 'adds same_year and current_year class to wrapping span' do
+      semantic_date_range_tag(date_object, date_tomorrow_object).must_match Regexp.new("<span class=\"date_range same_year current_year\".*?>.*?</time>")
+    end
   end
+
 end
