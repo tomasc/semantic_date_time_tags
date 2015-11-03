@@ -7,13 +7,14 @@ module SemanticDateTimeTags
     include ActionView::Helpers::DateHelper
     include ActionView::Helpers::TagHelper
 
+    attr_accessor :obj
+    attr_accessor :options
     attr_accessor :output_buffer
 
     # =====================================================================
 
-    def initialize obj, tag_name, options={}
+    def initialize obj, options={}
       @obj = obj
-      @tag_name = tag_name
       @options = options.tap{ |opts| opts.delete(:scope) }
     end
 
@@ -33,32 +34,32 @@ module SemanticDateTimeTags
         current_year_class,
         whole_hour_class,
         whole_minute_class,
-        @options[:class]
+        options[:class]
       ].flatten.reject(&:blank?)
     end
 
     def type_class
-      @obj.class.to_s.underscore
+      obj.class.to_s.underscore
     end
 
     def current_date_class
-      return unless [::Date,::DateTime].any?{ |c| @obj.instance_of? c }
-      'current_date' if @obj.today?
+      return unless [::Date,::DateTime].any?{ |c| obj.instance_of? c }
+      'current_date' if obj.today?
     end
 
     def current_year_class
-      return unless [::Date,::DateTime].any?{ |c| @obj.instance_of? c }
-      'current_year' if @obj.year == ::Date.today.year
+      return unless [::Date,::DateTime].any?{ |c| obj.instance_of? c }
+      'current_year' if obj.year == ::Date.today.year
     end
 
     def whole_hour_class
-      return unless [::Time,::DateTime].any?{ |c| @obj.instance_of? c }
-      'whole_hour' unless @obj.min > 0
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      'whole_hour' unless obj.min > 0
     end
 
     def whole_minute_class
-      return unless [::Time,::DateTime].any?{ |c| @obj.instance_of? c }
-      'whole_minute' unless @obj.sec > 0
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      'whole_minute' unless obj.sec > 0
     end
 
     private # =============================================================
@@ -68,11 +69,15 @@ module SemanticDateTimeTags
     end
 
     def format
-      @options.fetch :format, :full
+      options.fetch :format, :full
     end
 
     def localized_obj
-      I18n.l @obj, format: format
+      I18n.l obj, format: format
+    end
+
+    def tag_name
+      options.fetch :tag_name, :time
     end
 
   end

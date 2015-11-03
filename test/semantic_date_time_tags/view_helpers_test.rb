@@ -34,7 +34,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'wraps the whole thing in a span tag if passed as argument' do
-      semantic_time_tag(time_object, :span).must_match /\A<span.+?<\/span>\z/
+      semantic_time_tag(time_object, { tag_name: :span }).must_match /\A<span.+?<\/span>\z/
     end
 
     it 'adds whole_hour class if time is whole hour' do
@@ -46,7 +46,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'allows to pass :format' do
-      semantic_time_tag(time_object, :time, format: :test).must_include '~'
+      semantic_time_tag(time_object, format: :test).must_include '~'
     end
   end
 
@@ -66,7 +66,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'wraps everything in a span tag if passed as argument' do
-      semantic_date_tag(date_object, :span).must_match /\A<span.+?<\/span>\z/
+      semantic_date_tag(date_object, { tag_name: :span }).must_match /\A<span.+?<\/span>\z/
     end
 
     it 'returns year, month and day wrapped in a span tags' do
@@ -86,7 +86,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'allows to pass :format' do
-      semantic_date_tag(Date.today, :time, format: :test).must_include '~'
+      semantic_date_tag(Date.today, format: :test).must_include '~'
     end
   end
 
@@ -102,7 +102,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'allows to pass :format' do
-      semantic_date_time_tag(date_time_object, false, format: :test).must_include '~'
+      semantic_date_time_tag(date_time_object, all_day: false, format: :test).must_include '~'
     end
   end
 

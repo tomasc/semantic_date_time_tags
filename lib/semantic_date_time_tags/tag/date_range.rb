@@ -2,6 +2,9 @@ module SemanticDateTimeTags
   class Tag
     class DateRange < Tag
 
+      attr_accessor :date_from
+      attr_accessor :date_to
+
       def initialize date_from, date_to=nil, options={}
         @date_from = date_from
         @date_to = date_to
@@ -11,25 +14,25 @@ module SemanticDateTimeTags
       # ---------------------------------------------------------------------
 
       def spans_years?
-        return false if @date_to.nil?
-        @date_from.year != @date_to.year
+        return false if date_to.nil?
+        date_from.year != date_to.year
       end
 
       def spans_months?
-        @date_from.month != @date_to.month
+        date_from.month != date_to.month
       end
 
       def within_a_week?
-        (@date_from - @date_to) <= 7
+        (date_from - date_to) <= 7
       end
 
       def one_day?
-        @date_from == @date_to
+        date_from == date_to
       end
 
       def both_in_current_year?
         return false if spans_years?
-        @date_from.year == ::Date.today.year
+        date_from.year == ::Date.today.year
       end
 
       # ---------------------------------------------------------------------
@@ -48,9 +51,9 @@ module SemanticDateTimeTags
       # ---------------------------------------------------------------------
 
       def to_html
-        from = SemanticDateTimeTags::Tag::Date.new(@date_from, :time, class: 'from').to_html
+        from = SemanticDateTimeTags::Tag::Date.new(date_from, class: 'from').to_html
         sep = content_tag(:span, separator, class: 'date_range_separator')
-        to = SemanticDateTimeTags::Tag::Date.new(@date_to, :time, class: 'to').to_html
+        to = SemanticDateTimeTags::Tag::Date.new(date_to, class: 'to').to_html
 
         content_tag(:span, class: dom_classes) { [ from, sep, to ].join.html_safe }.html_safe
       end
@@ -58,7 +61,7 @@ module SemanticDateTimeTags
       private # =============================================================
 
       def separator
-        @options.fetch(:separator, ' – ')
+        options.fetch(:separator, ' – ')
       end
 
     end
