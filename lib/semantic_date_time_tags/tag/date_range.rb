@@ -26,8 +26,12 @@ module SemanticDateTimeTags
         (date_from - date_to) <= 7
       end
 
-      def one_day?
-        date_from == date_to
+      def same_day?
+        date_from.to_date == date_to.to_date
+      end
+
+      def same_time?
+        date_from.to_time == date_to.to_time
       end
 
       def both_in_current_year?
@@ -44,7 +48,8 @@ module SemanticDateTimeTags
         res << 'current_year' if both_in_current_year?
         res << 'same_month' unless spans_months?
         res << 'more_than_a_week' unless within_a_week?
-        res << 'same_day' if one_day?
+        res << 'same_day' if same_day?
+        res << 'same_time' if same_time?
         res
       end
 
