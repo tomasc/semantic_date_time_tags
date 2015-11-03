@@ -18,6 +18,7 @@ module SemanticDateTimeTags
         end
 
         options[:class] = dom_classes
+        options[:data] = dom_data
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
 

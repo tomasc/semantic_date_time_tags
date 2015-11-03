@@ -4,10 +4,9 @@ require 'semantic_date_time_tags/view_helpers'
 describe SemanticDateTimeTags::ViewHelpers do
   include SemanticDateTimeTags::ViewHelpers
 
-  let(:time_object) { Time.parse('31/10/2015') }
   let(:date_object) { Date.parse('31/10/2015') }
   let(:date_tomorrow_object) { Date.parse('31/10/2015')+1.day }
-  let(:date_time_object) { DateTime.parse('31/10/2015') }
+  let(:time_object) { Time.parse('31/10/2015') }
 
   # ---------------------------------------------------------------------
 
@@ -123,12 +122,24 @@ describe SemanticDateTimeTags::ViewHelpers do
   # ---------------------------------------------------------------------
 
   describe '#semantic_date_time_tag' do
+    let(:date_time_object) { DateTime.parse('31/10/2015') }
+    let(:date_time_object_noon) { DateTime.parse('31/10/2015').noon }
+    let(:date_time_object_midnight) { DateTime.parse('31/10/2015').midnight }
+
     it 'only works with a time or date_time object' do
       proc { semantic_date_time_tag(time_object) }.must_raise RuntimeError
     end
 
     it 'wraps the whole thing in a time tag' do
       semantic_date_time_tag(date_time_object).must_match /\A<time.+?<\/time>\z/
+    end
+
+    it 'adds noon as data-in-words if time is noon' do
+      semantic_date_time_tag(date_time_object_noon).must_match /\A<time.+?data-in-words=\"noon\".+?<\/time>\z/
+    end
+
+    it 'adds midnight as data-in-words if time is midnight' do
+      semantic_date_time_tag(date_time_object_midnight).must_match /\A<time.+?data-in-words=\"midnight\".+?<\/time>\z/
     end
 
     it 'allows to pass :format' do
