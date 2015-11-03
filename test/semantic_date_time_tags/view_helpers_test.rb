@@ -132,7 +132,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'allows to pass :format' do
-      semantic_date_time_tag(date_time_object, all_day: false, format: :test).must_include '~'
+      semantic_date_time_tag(date_time_object, format: :test).must_include '~'
     end
   end
 
