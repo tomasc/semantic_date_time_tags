@@ -150,12 +150,24 @@ describe SemanticDateTimeTags::ViewHelpers do
   # ---------------------------------------------------------------------
 
   describe '#semantic_date_range_tag' do
+    let(:date_time_object_from) { DateTime.parse('31/10/2015') }
+    let(:date_time_object_to) { DateTime.parse('11/11/2015') }
+
     it 'returns the from date wrapped correctly' do
       semantic_date_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>/
     end
 
     it 'adds same_year and current_year class to wrapping span' do
       semantic_date_range_tag(date_object, date_tomorrow_object).must_match /<time.+?date_range.+?current_year.+?>/
+    end
+
+    it 'accepts datetime objects' do
+      semantic_date_range_tag(date_time_object_from, date_time_object_to).must_match /<time.+?from.+?<\/time>/
+      semantic_date_range_tag(date_time_object_from, date_time_object_to).must_match /<time.+?to.+?<\/time>/
+    end
+
+    it 'has an alias of semantic_date_tim_range_tag' do
+      semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>/
     end
   end
 

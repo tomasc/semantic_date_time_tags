@@ -51,9 +51,17 @@ module SemanticDateTimeTags
       # ---------------------------------------------------------------------
 
       def to_html
-        from = SemanticDateTimeTags::Tag::Date.new(date_from, class: 'from').to_html
+        from = case date_from
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, class: 'from').to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, class: 'from').to_html
+        end
+
         sep = content_tag(:span, separator, class: 'date_range_separator')
-        to = SemanticDateTimeTags::Tag::Date.new(date_to, class: 'to').to_html
+
+        to = case date_to
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, class: 'to').to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, class: 'to').to_html
+        end
 
         content_tag(:span, class: dom_classes) { [ from, sep, to ].join.html_safe }.html_safe
       end

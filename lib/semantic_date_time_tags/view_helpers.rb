@@ -21,6 +21,7 @@ module SemanticDateTimeTags
     def semantic_date_range_tag date_from, date_to, options={}
       SemanticDateTimeTags::Tag::DateRange.new(date_from, date_to, options).to_html
     end
+    alias_method :semantic_date_time_range_tag, :semantic_date_range_tag
 
     # accepts only datetime
     def semantic_date_time_tag date_time, options={}
