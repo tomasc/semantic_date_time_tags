@@ -32,6 +32,8 @@ module SemanticDateTimeTags
         type_class,
         current_date_class,
         current_year_class,
+        midnight_class,
+        noon_class,
         whole_hour_class,
         whole_minute_class,
         options[:class]
@@ -62,6 +64,24 @@ module SemanticDateTimeTags
       'whole_minute' unless obj.sec > 0
     end
 
+    def noon_class
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      'noon' if obj == obj.noon
+    end
+
+    def midnight_class
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      'midnight' if obj == obj.midnight
+    end
+
+    # ---------------------------------------------------------------------
+
+    def dom_data
+      {
+        in_words: in_words
+      }
+    end
+
     private # =============================================================
 
     def format_string
@@ -72,12 +92,34 @@ module SemanticDateTimeTags
       options.fetch :format, :full
     end
 
+    # ---------------------------------------------------------------------
+
     def localized_obj
       I18n.l obj, format: format
     end
 
+    # ---------------------------------------------------------------------
+
     def tag_name
       options.fetch :tag_name, :time
+    end
+
+    # ---------------------------------------------------------------------
+
+    def in_words
+      [ noon_in_words, midnight_in_words ].reject(&:blank?).join(' ')
+    end
+
+    def noon_in_words
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless obj == obj.noon
+      I18n.t :noon, scope: %i(time in_words)
+    end
+
+    def midnight_in_words
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless obj == obj.midnight
+      I18n.t :midnight, scope: %i(time in_words)
     end
 
   end
