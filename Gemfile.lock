@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    semantic_date_time_tags (0.1.4)
+    semantic_date_time_tags (0.1.5)
       rails (>= 3.0.0)
 
 GEM
@@ -76,7 +76,7 @@ GEM
       domain_name (~> 0.5)
     i18n (0.7.0)
     json (1.8.3)
-    listen (3.0.3)
+    listen (3.0.4)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     loofah (2.0.3)
