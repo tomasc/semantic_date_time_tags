@@ -52,5 +52,14 @@ describe SemanticDateTimeTags::FormatParser do
         to_html.must_equal '<span class="day A">Saturday</span><span class="sep"> </span><span class="day d">12</span><span class="sep"> / </span><span class="month m">12</span><span class="sep"> / </span><span class="year Y">2014</span>'
       end
     end
+
+    describe '%-l:%M %P' do
+      let(:format) { '%-l:%M %P' }
+      let(:string) { '12:30 am' }
+
+      it 'marks up the am/pm' do
+        to_html.must_include '<span class="ampm P">'
+      end
+    end
   end
 end

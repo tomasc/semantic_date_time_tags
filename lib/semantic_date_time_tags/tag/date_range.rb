@@ -40,6 +40,12 @@ module SemanticDateTimeTags
         date_from.year == ::Date.today.year
       end
 
+      def same_meridian?
+        return false unless same_day?
+        (date_from.to_time.hour < 12 && date_to.to_time.hour < 12) ||
+        (date_from.to_time.hour >= 12 && date_to.to_time.hour >= 12)
+      end
+
       # ---------------------------------------------------------------------
 
       def dom_classes
@@ -51,6 +57,7 @@ module SemanticDateTimeTags
         res << 'more_than_a_week' unless within_a_week?
         res << 'same_day' if same_day?
         res << 'same_time' if same_time?
+        res << 'same_meridian' if same_meridian?
         res
       end
 

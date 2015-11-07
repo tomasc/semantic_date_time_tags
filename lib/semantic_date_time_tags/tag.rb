@@ -29,6 +29,7 @@ module SemanticDateTimeTags
     def dom_classes
       [
         'semantic',
+        am_pm_class,
         type_class,
         current_date_class,
         current_year_class,
@@ -72,6 +73,14 @@ module SemanticDateTimeTags
     def midnight_class
       return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
       'midnight' if obj == obj.midnight
+    end
+
+    def am_pm_class
+      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      case
+      when (0..11).include?(obj.hour) then 'am'
+      else 'pm'
+      end
     end
 
     # ---------------------------------------------------------------------

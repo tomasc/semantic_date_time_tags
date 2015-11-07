@@ -41,7 +41,7 @@ module SemanticDateTimeTags
       when /%-?[aAdej]/ then ['day', comp[/\w/]]
       when /%-?[HKIl]/ then ['hours', comp[/\w/]]
       when /%-?[M]/ then ['minutes', comp[/\w/]]
-      when /%-?[p]/ then ['ampm', comp[/\w/]]
+      when /%-?[pP]/ then ['ampm', comp[/\w/]]
       when /\W+/ then ['sep']
       end
     end

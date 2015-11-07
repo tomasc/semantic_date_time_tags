@@ -17,6 +17,8 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:time_object_noon) { Time.new(2015, 11, 3, 12, 00) }
     let(:time_object_whole_hour) { Time.new(2014, 8, 21, 15) }
     let(:time_object_whole_minute) { Time.new(2014, 8, 21, 15, 30) }
+    let(:time_object_before_noon) { Time.new(2014, 8, 21, 11, 00) }
+    let(:time_object_after_noon) { Time.new(2014, 8, 21, 12, 01) }
 
 
     it 'does not work with a date object' do
@@ -57,6 +59,14 @@ describe SemanticDateTimeTags::ViewHelpers do
 
     it 'adds midnight class if time is midnight' do
       semantic_time_tag(time_object_midnight).must_match /\A<time.+?midnight.+?<\/time>\z/
+    end
+
+    it 'adds am class if time is before noon' do
+      semantic_time_tag(time_object_before_noon).must_match /\A<time.+?am.+?<\/time>\z/
+    end
+
+    it 'adds pm class if time is after noon' do
+      semantic_time_tag(time_object_after_noon).must_match /\A<time.+?pm.+?<\/time>\z/
     end
 
 
@@ -153,6 +163,8 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:date_time_object_from) { DateTime.parse('31/10/2015') }
     let(:date_time_object_to) { DateTime.parse('11/11/2015') }
 
+    let(:date_time_object_from_morning) { DateTime.parse('7/11/2015 8:00') }
+
     it 'returns the from date wrapped correctly' do
       semantic_date_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>.+?<time.+?semantic.+?date.+?to.+?>/
     end
@@ -169,6 +181,10 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_range_tag(date_time_object_from, date_time_object_from).must_match /\A<span.+?date_range.+?same_day.+?same_time.+?>/
     end
 
+    it 'adds am to wrapping span if both times in morning' do
+      semantic_date_range_tag(date_time_object_from_morning, date_time_object_from_morning+1.hour).must_match /\A<span.+?date_range.+?same_meridian.+?>/
+    end
+
     it 'accepts datetime objects' do
       semantic_date_range_tag(date_time_object_from, date_time_object_to).must_match /<time.+?from.+?<\/time>/
       semantic_date_range_tag(date_time_object_from, date_time_object_to).must_match /<time.+?to.+?<\/time>/
@@ -177,6 +193,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'has an alias of semantic_date_tim_range_tag' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>/
     end
+
 
     it 'allows to pass :format' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include '~'
