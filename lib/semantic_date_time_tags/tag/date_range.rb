@@ -4,6 +4,7 @@ module SemanticDateTimeTags
 
       attr_accessor :date_from
       attr_accessor :date_to
+      attr_accessor :options
 
       def initialize date_from, date_to=nil, options={}
         @date_from = date_from
@@ -57,15 +58,15 @@ module SemanticDateTimeTags
 
       def to_html
         from = case date_from
-        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, class: 'from').to_html
-        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, class: 'from').to_html
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, options.merge(class: 'from')).to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, options.merge(class: 'from')).to_html
         end
 
         sep = content_tag(:span, separator, class: 'date_range_separator')
 
         to = case date_to
-        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, class: 'to').to_html
-        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, class: 'to').to_html
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, options.merge(class: 'to')).to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, options.merge(class: 'to')).to_html
         end
 
         content_tag(:span, class: dom_classes) { [ from, sep, to ].join.html_safe }.html_safe

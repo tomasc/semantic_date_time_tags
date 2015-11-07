@@ -177,6 +177,10 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'has an alias of semantic_date_tim_range_tag' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>/
     end
+
+    it 'allows to pass :format' do
+      semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include '~'
+    end
   end
 
 end
