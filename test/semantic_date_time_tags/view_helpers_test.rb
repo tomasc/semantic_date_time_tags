@@ -163,7 +163,8 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:date_time_object_from) { DateTime.parse('31/10/2015') }
     let(:date_time_object_to) { DateTime.parse('11/11/2015') }
 
-    let(:date_time_object_from_morning) { DateTime.parse('7/11/2015 8:00') }
+    let(:date_time_object_from_morning) { DateTime.parse('14/11/2015 11:00') }
+    let(:date_time_object_to_afternoon) { DateTime.parse('14/11/2015 15:00') }
 
     it 'returns the from date wrapped correctly' do
       semantic_date_range_tag(date_object, date_tomorrow_object).must_match /<time.+?semantic.+?date.+?from.+?>.+?<time.+?semantic.+?date.+?to.+?>/
@@ -182,7 +183,9 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'adds am to wrapping span if both times in morning' do
-      semantic_date_range_tag(date_time_object_from_morning, date_time_object_from_morning+1.hour).must_match /\A<span.+?date_range.+?same_meridian.+?>/
+      semantic_date_range_tag(date_time_object_from_morning-1.hour, date_time_object_from_morning).must_match /\A<span.+?date_range.+?same_meridian.+?>/
+      semantic_date_range_tag(date_time_object_from_morning, date_time_object_to_afternoon).wont_match /\A<span.+?date_range.+?same_meridian.+?>/
+      semantic_date_range_tag(date_time_object_to_afternoon, date_time_object_to_afternoon+1.hour).must_match /\A<span.+?date_range.+?same_meridian.+?>/
     end
 
     it 'accepts datetime objects' do
