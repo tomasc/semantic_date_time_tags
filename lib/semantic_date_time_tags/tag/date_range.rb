@@ -42,8 +42,8 @@ module SemanticDateTimeTags
 
       def same_meridian?
         return false unless same_day?
-        (date_from.hour < 12 && date_to.hour < 12) ||
-        (date_from.hour >= 12 && date_to.hour >= 12)
+        (date_from.to_datetime.hour < 12 && date_to.to_datetime.hour < 12) ||
+        (date_from.to_datetime.hour >= 12 && date_to.to_datetime.hour >= 12)
       end
 
       # ---------------------------------------------------------------------
