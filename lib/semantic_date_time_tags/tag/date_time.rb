@@ -3,8 +3,7 @@ require_relative '../format_parser'
 module SemanticDateTimeTags
   class Tag
     class DateTime < Tag
-
-      def initialize obj, options={}
+      def initialize(obj, options = {})
         raise 'object must be DateTime' unless obj.instance_of?(::DateTime)
         super(obj, options)
       end
@@ -32,9 +31,8 @@ module SemanticDateTimeTags
       end
 
       def localized_obj
-        obj.strftime I18n.t( format, scope: scope, locale: I18n.locale )
+        obj.strftime I18n.t(format, scope: scope, locale: I18n.locale)
       end
-
     end
   end
 end

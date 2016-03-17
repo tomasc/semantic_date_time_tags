@@ -3,7 +3,6 @@ require 'i18n'
 
 module SemanticDateTimeTags
   class Tag
-
     include ActionView::Helpers::DateHelper
     include ActionView::Helpers::TagHelper
 
@@ -13,9 +12,9 @@ module SemanticDateTimeTags
 
     # =====================================================================
 
-    def initialize obj, options={}
+    def initialize(obj, options = {})
       @obj = obj
-      @options = options.tap{ |opts| opts.delete(:scope) }
+      @options = options.tap { |opts| opts.delete(:scope) }
     end
 
     # ---------------------------------------------------------------------
@@ -46,39 +45,39 @@ module SemanticDateTimeTags
     end
 
     def current_date_class
-      return unless [::Date,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Date, ::DateTime].any? { |c| obj.instance_of? c }
       'current_date' if obj.today?
     end
 
     def current_year_class
-      return unless [::Date,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Date, ::DateTime].any? { |c| obj.instance_of? c }
       'current_year' if obj.year == ::Date.today.year
     end
 
     def whole_hour_class
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       'whole_hour' unless obj.min > 0
     end
 
     def whole_minute_class
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       'whole_minute' unless obj.sec > 0
     end
 
     def noon_class
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       'noon' if obj == obj.noon
     end
 
     def midnight_class
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       'midnight' if obj == obj.midnight
     end
 
     def am_pm_class
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       case
-      when (0..11).include?(obj.hour) then 'am'
+      when (0..11).cover?(obj.hour) then 'am'
       else 'pm'
       end
     end
@@ -114,20 +113,19 @@ module SemanticDateTimeTags
     # ---------------------------------------------------------------------
 
     def in_words
-      [ noon_in_words, midnight_in_words ].reject(&:blank?).join(' ')
+      [noon_in_words, midnight_in_words].reject(&:blank?).join(' ')
     end
 
     def noon_in_words
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       return unless obj == obj.noon
       I18n.t :noon, scope: %i(time in_words)
     end
 
     def midnight_in_words
-      return unless [::Time,::DateTime].any?{ |c| obj.instance_of? c }
+      return unless [::Time, ::DateTime].any? { |c| obj.instance_of? c }
       return unless obj == obj.midnight
       I18n.t :midnight, scope: %i(time in_words)
     end
-
   end
 end

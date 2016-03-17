@@ -2,7 +2,6 @@ require 'action_view'
 
 module SemanticDateTimeTags
   class FormatParser < Struct.new :format, :str
-
     include ActionView::Helpers::TagHelper
 
     def to_html
@@ -23,18 +22,18 @@ module SemanticDateTimeTags
       format.scan /(%-?\w|.+?(?=%))/
     end
 
-    def get_tag_for_match match, comp
+    def get_tag_for_match(match, comp)
       content_tag :span, match, class: get_classes_for_component(comp)
     end
 
-    def get_regexp_for_component comp
+    def get_regexp_for_component(comp)
       case
-      when comp =~ /%-?\w/ then "(\\w+)"
+      when comp =~ /%-?\w/ then '(\\w+)'
       else "(#{comp})"
       end
     end
 
-    def get_classes_for_component comp
+    def get_classes_for_component(comp)
       case comp
       when /%-?[YCy]/ then ['year', comp[/\w/]]
       when /%-?[mBbh]/ then ['month', comp[/\w/]]
@@ -45,6 +44,5 @@ module SemanticDateTimeTags
       when /\W+/ then ['sep']
       end
     end
-
   end
 end

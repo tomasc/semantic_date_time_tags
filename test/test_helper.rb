@@ -9,7 +9,7 @@ require 'rubygems'
 
 I18n.backend.send(:init_translations)
 
-if ENV["CI"]
-  require "coveralls"
+if ENV['CI']
+  require 'coveralls'
   Coveralls.wear!
 end

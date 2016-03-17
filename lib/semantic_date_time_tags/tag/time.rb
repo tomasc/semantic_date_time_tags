@@ -3,8 +3,7 @@ require_relative '../format_parser'
 module SemanticDateTimeTags
   class Tag
     class Time < Tag
-
-      def initialize obj, options={}
+      def initialize(obj, options = {})
         raise 'object must be Time' unless obj.instance_of?(::Time)
         super(obj, options)
       end
@@ -30,7 +29,6 @@ module SemanticDateTimeTags
       def scope
         'time.formats'
       end
-
     end
   end
 end
