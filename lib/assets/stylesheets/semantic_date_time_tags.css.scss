@@ -1,3 +1,5 @@
+@import 'mixins/*';
+
 span.date_range {
   @include date-range-same-year;
   @include date-range-same-year-same-month;
