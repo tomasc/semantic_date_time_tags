@@ -1,0 +1,20 @@
+/* hides minutes if whole hour */
+@mixin date-time-whole-hour {
+  &.whole_hour {
+    span.minutes,
+    span.minutes + span.sep {
+      display: none;
+    }
+  }
+}
+
+
+/* hides seconds if whole minutes */
+@mixin date-time-whole-minute {
+  &.whole_minute {
+    span.seconds,
+    span.seconds + span.sep {
+      display: none;
+    }
+  }
+}
