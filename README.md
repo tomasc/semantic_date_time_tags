@@ -59,8 +59,16 @@ $ gem install semantic_date_time_tags
 ```
 
 If you want to use the default css you can include it like this:
+```css
+/*
+ *= require 'semantic_date_time_tags/default'
+ */
 ```
-*= require 'semantic_date_time_tags'
+
+Or if you like to use some of the mixins, import them like this:
+
+```scss
+@import "semantic_date_time_tags/partials/mixins";
 ```
 
 ## Usage

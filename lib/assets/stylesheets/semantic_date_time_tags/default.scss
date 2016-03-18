@@ -1,4 +1,4 @@
-@import 'mixins/*';
+@import 'partials/mixins';
 
 span.date_range {
   @include date-range-same-year;
