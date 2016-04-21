@@ -90,6 +90,10 @@ module SemanticDateTimeTags
 
     private # =============================================================
 
+    def scope
+      raise NotImplementedError
+    end
+
     def format_string
       I18n.t(scope)[format]
     end
