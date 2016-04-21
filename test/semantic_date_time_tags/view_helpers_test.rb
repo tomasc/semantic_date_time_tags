@@ -72,6 +72,10 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_time_tag(time_object_midnight).must_match(/\A<time.+?data-in-words=\"midnight\".+?<\/time>\z/)
     end
 
+    it 'adds locale class' do
+      semantic_time_tag(time_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+    end
+
     it 'allows to pass :format' do
       semantic_time_tag(time_object, format: :test).must_include '~'
       semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
@@ -113,9 +117,13 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_tag(Date.today - 1.year).wont_include 'current_year'
     end
 
+    it 'adds locale class' do
+      semantic_date_tag(Date.today).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+    end
+
     it 'allows to pass :format' do
       semantic_date_tag(Date.today, format: :test).must_include '~'
-      semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
+      semantic_date_tag(Date.today, format: :test).must_include 'data-format="test"'
     end
   end
 
@@ -142,9 +150,13 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_time_tag(date_time_object_midnight).must_match(/\A<time.+?data-in-words=\"midnight\".+?<\/time>\z/)
     end
 
+    it 'adds locale class' do
+      semantic_date_time_tag(date_time_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+    end
+
     it 'allows to pass :format' do
       semantic_date_time_tag(date_time_object, format: :test).must_include '~'
-      semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
+      semantic_date_time_tag(date_time_object, format: :test).must_include 'data-format="test"'
     end
   end
 
@@ -188,9 +200,13 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match(/<time.+?semantic.+?date.+?from.+?>/)
     end
 
+    it 'adds locale class' do
+      semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+    end
+
     it 'allows to pass :format' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include '~'
-      semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
+      semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include 'data-format="test"'
     end
   end
 end

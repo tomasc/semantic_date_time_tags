@@ -28,6 +28,7 @@ module SemanticDateTimeTags
     def dom_classes
       [
         'semantic',
+        locale_class,
         am_pm_class,
         type_class,
         current_date_class,
@@ -80,6 +81,10 @@ module SemanticDateTimeTags
       when (0..11).cover?(obj.hour) then 'am'
       else 'pm'
       end
+    end
+
+    def locale_class
+      I18n.locale.to_s
     end
 
     # ---------------------------------------------------------------------
