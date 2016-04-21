@@ -85,7 +85,7 @@ module SemanticDateTimeTags
     # ---------------------------------------------------------------------
 
     def dom_data
-      { in_words: in_words }
+      { in_words: in_words, format: format.to_s }
     end
 
     private # =============================================================
