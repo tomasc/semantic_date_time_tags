@@ -61,5 +61,14 @@ describe SemanticDateTimeTags::FormatParser do
         to_html.must_include '<span class="ampm P">'
       end
     end
+
+    describe ':cs' do
+      let(:format) { '%A, %-d. %B, %Y' }
+      let(:string) { "Čtvrtek, 16. Červen, 2016" }
+
+      it 'deals fine with accented characters' do
+        to_html.must_equal "<span class=\"day A\">Čtvrtek</span><span class=\"sep\">, </span><span class=\"day d\">16</span><span class=\"sep\">. </span><span class=\"month B\">Červen</span><span class=\"sep\">, </span><span class=\"year Y\">2016</span>"
+      end
+    end
   end
 end
