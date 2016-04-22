@@ -31,7 +31,8 @@ module SemanticDateTimeTags
       end
 
       def localized_obj
-        obj.strftime I18n.t(format, scope: scope, locale: I18n.locale)
+        format_string = I18n.t(format, scope: scope, locale: I18n.locale)
+        I18n.l(obj, format: format_string)
       end
     end
   end
