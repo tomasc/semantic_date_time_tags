@@ -15,7 +15,7 @@ module SemanticDateTimeTags
             processed_str = processed_str[match[0].length..-1]
           end
           res
-        end + processed_str
+        end + get_tag_for_str(processed_str)
       ).html_safe
     end
 
@@ -27,6 +27,11 @@ module SemanticDateTimeTags
 
     def get_tag_for_match(match, comp)
       content_tag :span, match, class: get_classes_for_component(comp)
+    end
+
+    def get_tag_for_str(str)
+      return '' unless str.present?
+      content_tag :span, str, class: 'str'
     end
 
     def get_regexp_for_component(comp)

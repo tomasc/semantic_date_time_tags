@@ -76,7 +76,7 @@ describe SemanticDateTimeTags::FormatParser do
       let(:string) { "09.09.2014 19.00 hrs" }
 
       it 'preserves additional strings' do
-        to_html.must_equal "<span class=\"day d\">09</span><span class=\"sep\">.</span><span class=\"month m\">09</span><span class=\"sep\">.</span><span class=\"year Y\">2014</span><span class=\"sep\"> </span><span class=\"hours H\">19</span><span class=\"sep\">.</span><span class=\"minutes M\">00</span> hrs"
+        to_html.must_equal "<span class=\"day d\">09</span><span class=\"sep\">.</span><span class=\"month m\">09</span><span class=\"sep\">.</span><span class=\"year Y\">2014</span><span class=\"sep\"> </span><span class=\"hours H\">19</span><span class=\"sep\">.</span><span class=\"minutes M\">00</span><span class=\"str\"> hrs</span>"
       end
     end
   end
