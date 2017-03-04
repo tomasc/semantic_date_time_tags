@@ -125,6 +125,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'allows to pass :format' do
       semantic_date_tag(Date.today, format: :test).must_include '~'
       semantic_date_tag(Date.today, format: :test).must_include 'data-format="test"'
+      semantic_date_tag(Date.today, format: '%a, %b %-d, %Y').must_include 'data-format="%a, %b %-d, %Y"'
     end
   end
 
@@ -158,6 +159,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'allows to pass :format' do
       semantic_date_time_tag(date_time_object, format: :test).must_include '~'
       semantic_date_time_tag(date_time_object, format: :test).must_include 'data-format="test"'
+      semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P').must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
     end
   end
 
@@ -208,6 +210,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'allows to pass :format' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include '~'
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include 'data-format="test"'
+      semantic_time_tag(time_object, format: '%a, %b %-d, %Y, %-l:%M %P').must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
     end
   end
 end

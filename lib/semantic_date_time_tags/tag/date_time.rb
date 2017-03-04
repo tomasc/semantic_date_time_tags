@@ -31,7 +31,10 @@ module SemanticDateTimeTags
       end
 
       def localized_obj
-        format_string = I18n.t(format, scope: scope, locale: I18n.locale)
+        format_string = case format
+                        when Symbol then I18n.t(format, scope: scope, locale: I18n.locale)
+                        else format
+        end
         I18n.l(obj, format: format_string)
       end
     end
