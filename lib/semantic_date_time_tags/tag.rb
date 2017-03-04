@@ -100,7 +100,10 @@ module SemanticDateTimeTags
     end
 
     def format_string
-      I18n.t(scope)[format]
+      case format
+      when Symbol then I18n.t(scope)[format]
+      else format
+      end
     end
 
     def format

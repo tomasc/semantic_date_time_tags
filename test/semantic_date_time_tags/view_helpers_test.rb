@@ -79,6 +79,7 @@ describe SemanticDateTimeTags::ViewHelpers do
     it 'allows to pass :format' do
       semantic_time_tag(time_object, format: :test).must_include '~'
       semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
+      semantic_time_tag(time_object, format: '%-l:%M %P').must_include 'data-format="%-l:%M %P"'
     end
   end
 
