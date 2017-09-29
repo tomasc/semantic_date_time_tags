@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## 0.1.17
+## 0.1.18
 
-* removed `:separator` from options passes to the `time` tag (in effect producing invalid HTML)
+* removed `:separator` from options passed to the `time` tag (in effect producing invalid HTML)
