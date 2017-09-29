@@ -9,6 +9,7 @@ module SemanticDateTimeTags
         @date_from = date_from
         @date_to = date_to
         @options = options
+        @separator = options.delete(:separator) || ' – '
       end
 
       # ---------------------------------------------------------------------
@@ -68,7 +69,7 @@ module SemanticDateTimeTags
                when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, options.merge(class: 'from')).to_html
         end
 
-        sep = content_tag(:span, separator, class: 'date_range_separator')
+        sep = content_tag(:span, @separator, class: 'date_range_separator')
 
         to = case date_to
              when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, options.merge(class: 'to')).to_html
@@ -76,12 +77,6 @@ module SemanticDateTimeTags
         end
 
         content_tag(:span, class: dom_classes) { [from, sep, to].join.html_safe }.html_safe
-      end
-
-      private # =============================================================
-
-      def separator
-        options.fetch(:separator, ' – ')
       end
     end
   end

@@ -5,9 +5,6 @@ module SemanticDateTimeTags
     class Time < Tag
       def initialize(obj, options = {})
         raise 'object must be Time' unless obj.instance_of?(::Time)
-
-        options = options.except(*%i(separator))
-
         super(obj, options)
       end
 

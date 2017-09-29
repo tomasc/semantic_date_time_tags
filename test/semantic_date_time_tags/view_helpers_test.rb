@@ -76,10 +76,6 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_time_tag(time_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
     end
 
-    it 'does not include separator attribute' do
-      semantic_time_tag(time_object, separator: '–').wont_match(/separator/)
-    end
-
     it 'allows to pass :format' do
       semantic_time_tag(time_object, format: :test).must_include '~'
       semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
@@ -209,6 +205,10 @@ describe SemanticDateTimeTags::ViewHelpers do
 
     it 'adds locale class' do
       semantic_date_time_range_tag(date_object, date_tomorrow_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+    end
+
+    it 'does not include separator attribute' do
+      semantic_date_time_range_tag(date_object, date_tomorrow_object, separator: '–').wont_match(/separator=/)
     end
 
     it 'allows to pass :format' do
