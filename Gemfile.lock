@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    semantic_date_time_tags (0.1.18)
+    semantic_date_time_tags (0.1.19)
       rails (>= 3)
 
 GEM
@@ -56,7 +56,7 @@ GEM
       tins (~> 1.6)
     crass (1.0.2)
     docile (1.1.5)
-    erubi (1.6.1)
+    erubi (1.7.0)
     ffi (1.9.18)
     formatador (0.2.5)
     globalid (0.4.0)
