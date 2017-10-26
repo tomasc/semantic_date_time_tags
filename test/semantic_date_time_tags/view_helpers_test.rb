@@ -80,6 +80,7 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_time_tag(time_object, format: :test).must_include '~'
       semantic_time_tag(time_object, format: :test).must_include 'data-format="test"'
       semantic_time_tag(time_object, format: '%-l:%M %P').must_include 'data-format="%-l:%M %P"'
+      semantic_time_tag(time_object, format: '%-l:%M %P').wont_include ' format='
     end
   end
 
@@ -126,9 +127,10 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_tag(Date.today, format: :test).must_include '~'
       semantic_date_tag(Date.today, format: :test).must_include 'data-format="test"'
       semantic_date_tag(Date.today, format: '%a, %b %-d, %Y').must_include 'data-format="%a, %b %-d, %Y"'
+      semantic_date_tag(Date.today, format: '%a, %b %-d, %Y').wont_include ' format='
     end
   end
-
+  
   # ---------------------------------------------------------------------
 
   describe '#semantic_date_time_tag' do
@@ -160,6 +162,7 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_time_tag(date_time_object, format: :test).must_include '~'
       semantic_date_time_tag(date_time_object, format: :test).must_include 'data-format="test"'
       semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P').must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
+      semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P').wont_include ' format='
     end
   end
 
@@ -215,6 +218,7 @@ describe SemanticDateTimeTags::ViewHelpers do
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include '~'
       semantic_date_time_range_tag(date_object, date_tomorrow_object, format: :test).must_include 'data-format="test"'
       semantic_time_tag(time_object, format: '%a, %b %-d, %Y, %-l:%M %P').must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
+      semantic_time_tag(time_object, format: '%a, %b %-d, %Y, %-l:%M %P').wont_include ' format='
     end
   end
 end

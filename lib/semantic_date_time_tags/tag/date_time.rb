@@ -24,7 +24,7 @@ module SemanticDateTimeTags
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
 
-        time_tag(obj, options) { value }.html_safe
+        time_tag(obj, options.except(*%i(format))) { value }.html_safe
       end
 
       private # =============================================================

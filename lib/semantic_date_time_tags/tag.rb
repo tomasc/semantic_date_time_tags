@@ -14,7 +14,7 @@ module SemanticDateTimeTags
 
     def initialize(obj, options = {})
       @obj = obj
-      @options = options.tap { |opts| opts.delete(:scope) }
+      @options = options.except(*%i(scope))
     end
 
     # ---------------------------------------------------------------------

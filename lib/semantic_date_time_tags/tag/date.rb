@@ -7,7 +7,7 @@ module SemanticDateTimeTags
         raise 'object must be Date or DateTime' unless [::Date, ::DateTime].any? { |c| obj.instance_of? c }
 
         options = options.except(*%i(separator))
-        
+
         super(obj, options)
       end
 
@@ -24,7 +24,7 @@ module SemanticDateTimeTags
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
 
-        content_tag(tag_name, options) { value }.html_safe
+        content_tag(tag_name, options.except(*%i(format))) { value }.html_safe
       end
 
       private # =============================================================
