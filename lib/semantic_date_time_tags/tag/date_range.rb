@@ -12,8 +12,6 @@ module SemanticDateTimeTags
         @separator = options.delete(:separator) || ' – '
       end
 
-      # ---------------------------------------------------------------------
-
       def spans_years?
         return false if date_to.nil?
         date_from.year != date_to.year
@@ -46,8 +44,6 @@ module SemanticDateTimeTags
           (date_from.to_datetime.hour >= 12 && date_to.to_datetime.hour >= 12)
       end
 
-      # ---------------------------------------------------------------------
-
       def dom_classes
         res = []
         res << 'date_range'
@@ -60,8 +56,6 @@ module SemanticDateTimeTags
         res << 'same_meridian' if same_meridian?
         res
       end
-
-      # ---------------------------------------------------------------------
 
       def to_html
         from = case date_from

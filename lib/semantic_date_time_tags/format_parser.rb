@@ -19,7 +19,7 @@ module SemanticDateTimeTags
       ).html_safe
     end
 
-    private # =============================================================
+    private
 
     def formatting_components
       format.scan(/(%-?[[:word:]]|.+?(?=%))/)

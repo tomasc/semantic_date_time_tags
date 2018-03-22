@@ -11,8 +11,6 @@ module SemanticDateTimeTags
         super(obj, options)
       end
 
-      # ---------------------------------------------------------------------
-
       def to_html
         if tag_name == :time
           datetime = obj.acts_like?(:time) ? obj.xmlschema : obj.iso8601
@@ -27,7 +25,7 @@ module SemanticDateTimeTags
         time_tag(obj, options.except(*%i(format))) { value }.html_safe
       end
 
-      private # =============================================================
+      private
 
       def scope
         'date_time.formats'

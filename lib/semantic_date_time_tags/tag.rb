@@ -10,20 +10,14 @@ module SemanticDateTimeTags
     attr_accessor :options
     attr_accessor :output_buffer
 
-    # =====================================================================
-
     def initialize(obj, options = {})
       @obj = obj
       @options = options.except(*%i(scope))
     end
 
-    # ---------------------------------------------------------------------
-
     def to_html
       raise NotImplementedError
     end
-
-    # ---------------------------------------------------------------------
 
     def dom_classes
       [
@@ -87,13 +81,11 @@ module SemanticDateTimeTags
       I18n.locale.to_s
     end
 
-    # ---------------------------------------------------------------------
-
     def dom_data
       { in_words: in_words, format: format.to_s }
     end
 
-    private # =============================================================
+    private
 
     def scope
       raise NotImplementedError
@@ -110,19 +102,13 @@ module SemanticDateTimeTags
       options.fetch :format, :full
     end
 
-    # ---------------------------------------------------------------------
-
     def localized_obj
       I18n.l obj, format: format
     end
 
-    # ---------------------------------------------------------------------
-
     def tag_name
       options.fetch :tag_name, :time
     end
-
-    # ---------------------------------------------------------------------
 
     def in_words
       [noon_in_words, midnight_in_words].reject(&:blank?).join(' ')

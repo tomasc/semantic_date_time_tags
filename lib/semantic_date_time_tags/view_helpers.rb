@@ -14,8 +14,6 @@ module SemanticDateTimeTags
       end
     end
 
-    # =====================================================================
-
     # accepts datetime and date
     def semantic_date_range_tag(date_from, date_to, options = {})
       SemanticDateTimeTags::Tag::DateRange.new(date_from, date_to, options).to_html
