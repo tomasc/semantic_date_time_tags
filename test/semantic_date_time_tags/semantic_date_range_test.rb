@@ -20,7 +20,8 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it 'adds same_year and current_year class to wrapping span' do
-      semantic_date_range_tag(date_object, date_tomorrow_object).must_match(/\A<span.+?date_range.+?current_year.+?>/)
+      p semantic_date_range_tag(date_object, date_tomorrow_object)
+      semantic_date_range_tag(date_object, date_tomorrow_object).must_match(/\A<span.+?date_range.+?same_year.+?current_year.+?>/)
     end
 
     it 'adds same_day to wrapping span' do

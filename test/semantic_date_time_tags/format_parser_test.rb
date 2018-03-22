@@ -5,8 +5,6 @@ describe SemanticDateTimeTags::FormatParser do
   subject { SemanticDateTimeTags::FormatParser.new(format, string) }
   let(:to_html) { subject.to_html }
 
-  # ---------------------------------------------------------------------
-
   describe '#to_html' do
     describe 'd / m / Y' do
       let(:format) { '%d / %m / %Y' }
