@@ -82,5 +82,9 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_time_tag(time_object, format: "%-l:%M %P")).must_include 'data-format="%-l:%M %P"'
       _(semantic_time_tag(time_object, format: "%-l:%M %P")).wont_include " format="
     end
+
+    it "allows to pass data attributes as a Hash" do
+      _(semantic_time_tag(time_object, data: { name: "value" })).must_include 'data-name="value"'
+    end
   end
 end

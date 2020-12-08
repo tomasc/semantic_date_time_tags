@@ -84,7 +84,8 @@ module SemanticDateTimeTags
     end
 
     def dom_data
-      { in_words: in_words, format: format.to_s }
+      options.fetch(:data, {})
+        .merge(in_words: in_words, format: format.to_s)
     end
 
     private

@@ -62,5 +62,10 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_time_tag(time_object, format: "%a, %b %-d, %Y, %-l:%M %P")).must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
       _(semantic_time_tag(time_object, format: "%a, %b %-d, %Y, %-l:%M %P")).wont_include " format="
     end
+
+    it "allows to pass data attributes as a Hash" do
+      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, data: { name: "value" })).must_match /\<span.+?data-name="value".+?\>/
+      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, time_data: { time_name: "time value" })).must_match /\<time.+?data-time-name="time value".+?\>/
+    end
   end
 end

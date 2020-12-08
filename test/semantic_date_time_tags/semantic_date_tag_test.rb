@@ -53,5 +53,9 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_date_tag(Date.today, format: "%a, %b %-d, %Y")).must_include 'data-format="%a, %b %-d, %Y"'
       _(semantic_date_tag(Date.today, format: "%a, %b %-d, %Y")).wont_include " format="
     end
+
+    it "allows to pass data attributes as a Hash" do
+      _(semantic_date_tag(Date.today, data: { name: "value" })).must_include 'data-name="value"'
+    end
   end
 end
