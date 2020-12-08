@@ -1,10 +1,12 @@
-require 'action_view'
+# frozen_string_literal: true
 
-require_relative 'tag'
-require_relative 'tag/date_range'
-require_relative 'tag/date_time'
-require_relative 'tag/date'
-require_relative 'tag/time'
+require "action_view"
+
+require_relative "tag"
+require_relative "tag/date_range"
+require_relative "tag/date_time"
+require_relative "tag/date"
+require_relative "tag/time"
 
 module SemanticDateTimeTags
   module ViewHelpers

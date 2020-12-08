@@ -1,10 +1,12 @@
-require_relative '../format_parser'
+# frozen_string_literal: true
+
+require_relative "../format_parser"
 
 module SemanticDateTimeTags
   class Tag
     class Date < Tag
       def initialize(obj, options = {})
-        raise 'object must be Date or DateTime' unless [::Date, ::DateTime].any? { |c| obj.instance_of? c }
+        raise "object must be Date or DateTime" unless [::Date, ::DateTime].any? { |c| obj.instance_of? c }
 
         options = options.except(*%i(separator))
 
@@ -26,10 +28,9 @@ module SemanticDateTimeTags
       end
 
       private
-
-      def scope
-        'date.formats'
-      end
+        def scope
+          "date.formats"
+        end
     end
   end
 end

@@ -1,6 +1,6 @@
 # Semantic DateTime Tags
 
-[![Build Status](https://travis-ci.org/tomasc/semantic_date_time_tags.svg)](https://travis-ci.org/tomasc/semantic_date_time_tags) [![Gem Version](https://badge.fury.io/rb/semantic_date_time_tags.svg)](http://badge.fury.io/rb/semantic_date_time_tags) [![Coverage Status](https://img.shields.io/coveralls/tomasc/semantic_date_time_tags.svg)](https://coveralls.io/r/tomasc/semantic_date_time_tags)
+[![Gem Version](https://badge.fury.io/rb/semantic_date_time_tags.svg)](http://badge.fury.io/rb/semantic_date_time_tags)
 
 Set of Rails helpers that mark up Date, DateTime instances and their ranges with sensible combination of (html5) tags, data attributes and CSS classes so that their display can be easily controlled via CSS.
 
