@@ -1,4 +1,6 @@
-require 'rails/engine'
+# frozen_string_literal: true
+
+require "rails/engine"
 
 module SemanticDateTimeTags
   module Rails

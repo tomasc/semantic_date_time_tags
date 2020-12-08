@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SemanticDateTimeTags
   class Tag
     class DateRange < Tag
@@ -9,7 +11,7 @@ module SemanticDateTimeTags
         @date_from = date_from
         @date_to = date_to
         @options = options
-        @separator = options.delete(:separator) || ' – '
+        @separator = options.delete(:separator) || " – "
       end
 
       def spans_years?
@@ -46,28 +48,28 @@ module SemanticDateTimeTags
 
       def dom_classes
         res = []
-        res << 'date_range'
-        res << 'same_year' unless spans_years?
-        res << 'current_year' if both_in_current_year?
-        res << 'same_month' unless spans_months?
-        res << 'more_than_a_week' unless within_a_week?
-        res << 'same_day' if same_day?
-        res << 'same_time' if same_time?
-        res << 'same_meridian' if same_meridian?
+        res << "date_range"
+        res << "same_year" unless spans_years?
+        res << "current_year" if both_in_current_year?
+        res << "same_month" unless spans_months?
+        res << "more_than_a_week" unless within_a_week?
+        res << "same_day" if same_day?
+        res << "same_time" if same_time?
+        res << "same_meridian" if same_meridian?
         res
       end
 
       def to_html
         from = case date_from
-               when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, options.merge(class: 'from')).to_html
-               when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, options.merge(class: 'from')).to_html
+               when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, options.merge(class: "from")).to_html
+               when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, options.merge(class: "from")).to_html
         end
 
-        sep = content_tag(:span, @separator, class: 'date_range_separator')
+        sep = content_tag(:span, @separator, class: "date_range_separator")
 
         to = case date_to
-             when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, options.merge(class: 'to')).to_html
-             when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, options.merge(class: 'to')).to_html
+             when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, options.merge(class: "to")).to_html
+             when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, options.merge(class: "to")).to_html
         end
 
         content_tag(:span, class: dom_classes) { [from, sep, to].join.html_safe }.html_safe
