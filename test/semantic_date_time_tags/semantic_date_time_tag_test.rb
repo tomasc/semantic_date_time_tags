@@ -14,30 +14,30 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:date_time_object_midnight) { DateTime.parse("31/10/#{Date.today.year}").midnight }
 
     it 'only works with a time or date_time object' do
-      proc { semantic_date_time_tag(time_object) }.must_raise RuntimeError
+      _(proc { semantic_date_time_tag(time_object) }).must_raise RuntimeError
     end
 
     it 'wraps the whole thing in a time tag' do
-      semantic_date_time_tag(date_time_object).must_match(/\A<time.+?<\/time>\z/)
+      _(semantic_date_time_tag(date_time_object)).must_match(/\A<time.+?<\/time>\z/)
     end
 
     it 'adds noon as data-in-words if time is noon' do
-      semantic_date_time_tag(date_time_object_noon).must_match(/\A<time.+?data-in-words=\"noon\".+?<\/time>\z/)
+      _(semantic_date_time_tag(date_time_object_noon)).must_match(/\A<time.+?data-in-words=\"noon\".+?<\/time>\z/)
     end
 
     it 'adds midnight as data-in-words if time is midnight' do
-      semantic_date_time_tag(date_time_object_midnight).must_match(/\A<time.+?data-in-words=\"midnight\".+?<\/time>\z/)
+      _(semantic_date_time_tag(date_time_object_midnight)).must_match(/\A<time.+?data-in-words=\"midnight\".+?<\/time>\z/)
     end
 
     it 'adds locale class' do
-      semantic_date_time_tag(date_time_object).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
+      _(semantic_date_time_tag(date_time_object)).must_match(/class=\".+\s#{I18n.locale}\s.+\"/i)
     end
 
     it 'allows to pass :format' do
-      semantic_date_time_tag(date_time_object, format: :test).must_include '~'
-      semantic_date_time_tag(date_time_object, format: :test).must_include 'data-format="test"'
-      semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P').must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
-      semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P').wont_include ' format='
+      _(semantic_date_time_tag(date_time_object, format: :test)).must_include '~'
+      _(semantic_date_time_tag(date_time_object, format: :test)).must_include 'data-format="test"'
+      _(semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P')).must_include 'data-format="%a, %b %-d, %Y, %-l:%M %P"'
+      _(semantic_date_time_tag(date_time_object, format: '%a, %b %-d, %Y, %-l:%M %P')).wont_include ' format='
     end
   end
 end
