@@ -8,6 +8,9 @@ module SemanticDateTimeTags
     include ActionView::Helpers::TagHelper
 
     def to_html
+      return "" unless str.present?
+      return "" unless formatting_components.present?
+
       processed_str = str
       (
         formatting_components.flatten.inject("") do |res, comp|
@@ -23,6 +26,7 @@ module SemanticDateTimeTags
 
     private
       def formatting_components
+        return unless format.present?
         format.scan(/(%-?[[:word:]]|.+?(?=%))/)
       end
 
