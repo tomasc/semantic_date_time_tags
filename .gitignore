@@ -25,3 +25,5 @@ config/secrets.yml
 .rvmrc
 
 pkg/
+
+Gemfile.lock
