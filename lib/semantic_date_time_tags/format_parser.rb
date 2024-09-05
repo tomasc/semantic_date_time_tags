@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require "action_view"
+require "action_view/helpers/tag_helper"
 
 module SemanticDateTimeTags
   class FormatParser < Struct.new(:format, :str)
@@ -44,13 +44,13 @@ module SemanticDateTimeTags
 
       def get_classes_for_component(comp)
         case comp
-        when /%-?[YCy]/ then ["year", comp[/[[:word:]]/]]
-        when /%-?[mBbh]/ then ["month", comp[/[[:word:]]/]]
-        when /%-?[aAdej]/ then ["day", comp[/[[:word:]]/]]
-        when /%-?[HKIl]/ then ["hours", comp[/[[:word:]]/]]
-        when /%-?[M]/ then ["minutes", comp[/[[:word:]]/]]
-        when /%-?[pP]/ then ["ampm", comp[/[[:word:]]/]]
-        when /\W+/ then ["sep"]
+        when /%-?[YCy]/ then [ "year", comp[/[[:word:]]/] ]
+        when /%-?[mBbh]/ then [ "month", comp[/[[:word:]]/] ]
+        when /%-?[aAdej]/ then [ "day", comp[/[[:word:]]/] ]
+        when /%-?[HKIl]/ then [ "hours", comp[/[[:word:]]/] ]
+        when /%-?[M]/ then [ "minutes", comp[/[[:word:]]/] ]
+        when /%-?[pP]/ then [ "ampm", comp[/[[:word:]]/] ]
+        when /\W+/ then [ "sep" ]
         end
       end
   end
