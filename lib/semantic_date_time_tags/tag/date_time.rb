@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "../format_parser"
-
 module SemanticDateTimeTags
   class Tag
     class DateTime < Tag
       def initialize(obj, options = {})
         raise "object must be DateTime" unless obj.instance_of?(::DateTime)
 
-        options = options.except(*%i(separator))
+        options = options.except(*%i[separator])
 
         super(obj, options)
       end
@@ -24,7 +22,7 @@ module SemanticDateTimeTags
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
 
-        time_tag(obj, options.except(*%i(format))) { value }.html_safe
+        time_tag(obj, options.except(*%i[format])) { value }.html_safe
       end
 
       private
@@ -34,8 +32,8 @@ module SemanticDateTimeTags
 
         def localized_obj
           format_string = case format
-                          when Symbol then I18n.t(format, scope: scope, locale: I18n.locale)
-                          else format
+          when Symbol then I18n.t(format, scope: scope, locale: I18n.locale)
+          else format
           end
           I18n.l(obj, format: format_string)
         end

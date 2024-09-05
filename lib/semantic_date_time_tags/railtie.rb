@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "semantic_date_time_tags/view_helpers"
 require "rails/railtie"
 
 module SemanticDateTimeTags

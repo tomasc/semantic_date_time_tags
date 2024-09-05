@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* modernize the overall setup of this gem, update to Ruby 3.3.4
+* handle missing format string
+
 ## 0.2.0
 
 * added possibility to pass in data attributes to both `time` and `span` tags (date range)
