@@ -66,19 +66,19 @@ module SemanticDateTimeTags
       def to_html
         from_options = options.merge(class: "from").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
         from = case date_from
-               when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, from_options).to_html
-               when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, from_options).to_html
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, from_options).to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, from_options).to_html
         end
 
         sep = content_tag(:span, @separator, class: "date_range_separator")
 
         to_options = options.merge(class: "to").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
         to = case date_to
-             when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, to_options).to_html
-             when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, to_options).to_html
+        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, to_options).to_html
+        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, to_options).to_html
         end
 
-        content_tag(:span, class: dom_classes, data: dom_data) { [from, sep, to].join.html_safe }.html_safe
+        content_tag(:span, class: dom_classes, data: dom_data) { [ from, sep, to ].join.html_safe }.html_safe
       end
     end
   end

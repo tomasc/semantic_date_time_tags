@@ -1,13 +1,16 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require "action_view"
+require "action_view/helpers/tag_helper"
 
 module SemanticDateTimeTags
   class FormatParser < Struct.new(:format, :str)
     include ActionView::Helpers::TagHelper
 
     def to_html
+      return "" unless str.present?
+      return "" unless formatting_components.present?
+
       processed_str = str
       (
         formatting_components.flatten.inject("") do |res, comp|
@@ -23,6 +26,7 @@ module SemanticDateTimeTags
 
     private
       def formatting_components
+        return unless format.present?
         format.scan(/(%-?[[:word:]]|.+?(?=%))/)
       end
 
@@ -44,13 +48,13 @@ module SemanticDateTimeTags
 
       def get_classes_for_component(comp)
         case comp
-        when /%-?[YCy]/ then ["year", comp[/[[:word:]]/]]
-        when /%-?[mBbh]/ then ["month", comp[/[[:word:]]/]]
-        when /%-?[aAdej]/ then ["day", comp[/[[:word:]]/]]
-        when /%-?[HKIl]/ then ["hours", comp[/[[:word:]]/]]
-        when /%-?[M]/ then ["minutes", comp[/[[:word:]]/]]
-        when /%-?[pP]/ then ["ampm", comp[/[[:word:]]/]]
-        when /\W+/ then ["sep"]
+        when /%-?[YCy]/ then [ "year", comp[/[[:word:]]/] ]
+        when /%-?[mBbh]/ then [ "month", comp[/[[:word:]]/] ]
+        when /%-?[aAdej]/ then [ "day", comp[/[[:word:]]/] ]
+        when /%-?[HKIl]/ then [ "hours", comp[/[[:word:]]/] ]
+        when /%-?[M]/ then [ "minutes", comp[/[[:word:]]/] ]
+        when /%-?[pP]/ then [ "ampm", comp[/[[:word:]]/] ]
+        when /\W+/ then [ "sep" ]
         end
       end
   end

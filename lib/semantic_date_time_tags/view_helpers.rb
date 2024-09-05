@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require "action_view"
-
-require_relative "tag"
-require_relative "tag/date_range"
-require_relative "tag/date_time"
-require_relative "tag/date"
-require_relative "tag/time"
-
 module SemanticDateTimeTags
   module ViewHelpers
     def self.included(klass)

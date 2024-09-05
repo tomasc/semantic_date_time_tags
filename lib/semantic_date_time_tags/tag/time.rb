@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../format_parser"
-
 module SemanticDateTimeTags
   class Tag
     class Time < Tag
@@ -21,7 +19,7 @@ module SemanticDateTimeTags
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html
 
-        content_tag(tag_name, options.except(*%i(format))) { value }.html_safe
+        content_tag(tag_name, options.except(*%i[format])) { value }.html_safe
       end
 
       private
