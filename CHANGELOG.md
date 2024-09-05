@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.2.1
 
 * modernize the overall setup of this gem, update to Ruby 3.3.4
 * handle missing format string
