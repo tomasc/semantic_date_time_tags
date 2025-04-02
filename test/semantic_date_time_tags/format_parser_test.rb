@@ -37,7 +37,7 @@ describe SemanticDateTimeTags::FormatParser do
 
     describe "d / m / Y" do
       let(:format) { "%a, %b %e, %Y" }
-      let(:string) { "Sun, Jan 1, 2015" }
+      let(:string) { "Sun, Jan  1, 2015" }
 
       it "wraps the components into span tags" do
         _(to_html).must_equal '<span class="day a">Sun</span><span class="sep">, </span><span class="month b">Jan</span><span class="sep"> </span><span class="day e">1</span><span class="sep">, </span><span class="year Y">2015</span>'
@@ -78,6 +78,12 @@ describe SemanticDateTimeTags::FormatParser do
       it "preserves additional strings" do
         _(to_html).must_equal "<span class=\"day d\">09</span><span class=\"sep\">.</span><span class=\"month m\">09</span><span class=\"sep\">.</span><span class=\"year Y\">2014</span><span class=\"sep\"> </span><span class=\"hours H\">19</span><span class=\"sep\">.</span><span class=\"minutes M\">00</span><span class=\"str\"> hrs</span>"
       end
+    end
+
+    it "does not add extra 0 to the output" do
+      format = "%a, %e %b, %Y %H:%M"
+      string = "Thu,  3 Apr, 2025 20:30"
+      _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
     end
   end
 end

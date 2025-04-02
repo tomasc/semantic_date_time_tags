@@ -16,7 +16,7 @@ module SemanticDateTimeTags
         formatting_components.flatten.inject("") do |res, comp|
           regexp = Regexp.new(get_regexp_for_component(comp))
           if match = processed_str.match(regexp)
-            res += get_tag_for_match(match[0], comp)
+            res += get_tag_for_match(match[1], comp)
             processed_str = processed_str[match[0].length..-1]
           end
           res
@@ -41,6 +41,7 @@ module SemanticDateTimeTags
 
       def get_regexp_for_component(comp)
         case comp
+        when /%e/ then "\s([[:word:]]+)"
         when /%-?[[:word:]]/ then "([[:word:]]+)"
         else "(#{comp})"
         end
