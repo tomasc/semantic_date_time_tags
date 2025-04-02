@@ -81,6 +81,26 @@ describe SemanticDateTimeTags::FormatParser do
     end
 
     describe "blank padded formats" do
+      describe "seconds" do
+        it "handles seconds" do
+          format = "%H.%M.%S"
+          string = "08.30.12"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span>'
+        end
+
+        it "handles milliseconds" do
+          format = "%H.%M.%S:%L"
+          string = "08.30.12:012"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span><span class="sep">:</span><span class="milliseconds L">012</span>'
+        end
+
+        it "handles number of seconds since epoch" do
+          format = "%s"
+          string = "1606988400"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="seconds s">1606988400</span>'
+        end
+      end
+
       # Day of the month (1..31)
       describe "%e" do
         it "handles blank paddded results" do
