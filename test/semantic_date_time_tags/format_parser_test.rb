@@ -37,7 +37,7 @@ describe SemanticDateTimeTags::FormatParser do
 
     describe "d / m / Y" do
       let(:format) { "%a, %b %e, %Y" }
-      let(:string) { "Sun, Jan 1, 2015" }
+      let(:string) { "Sun, Jan  1, 2015" }
 
       it "wraps the components into span tags" do
         _(to_html).must_equal '<span class="day a">Sun</span><span class="sep">, </span><span class="month b">Jan</span><span class="sep"> </span><span class="day e">1</span><span class="sep">, </span><span class="year Y">2015</span>'
@@ -80,23 +80,71 @@ describe SemanticDateTimeTags::FormatParser do
       end
     end
 
-    describe "seconds" do
-      it "handles seconds" do
-        format = "%H.%M.%S"
-        string = "08.30.12"
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span>'
+    describe "blank padded formats" do
+      describe "seconds" do
+        it "handles seconds" do
+          format = "%H.%M.%S"
+          string = "08.30.12"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span>'
+        end
+
+        it "handles milliseconds" do
+          format = "%H.%M.%S:%L"
+          string = "08.30.12:012"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span><span class="sep">:</span><span class="milliseconds L">012</span>'
+        end
+
+        it "handles number of seconds since epoch" do
+          format = "%s"
+          string = "1606988400"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="seconds s">1606988400</span>'
+        end
       end
 
-      it "handles milliseconds" do
-        format = "%H.%M.%S:%L"
-        string = "08.30.12:012"
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="hours H">08</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep">.</span><span class="seconds S">12</span><span class="sep">:</span><span class="milliseconds L">012</span>'
+      # Day of the month (1..31)
+      describe "%e" do
+        it "handles blank paddded results" do
+          format = "%a, %e %b, %Y %H:%M"
+          string = "Thu,  3 Apr, 2025 20:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
+        end
+
+        it "handles non blank padded results" do
+          date = Date.new(2025, 4, 30)
+          format = "%e %b, %Y"
+          string = I18n.localize(date, format: format)
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day e">30</span><span class="sep"> </span><span class="month b">Apr</span><span class="sep">, </span><span class="year Y">2025</span>'
+        end
       end
 
-      it "handles number of seconds since epoch" do
-        format = "%s"
-        string = "1606988400"
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="seconds s">1606988400</span>'
+      # Hour of the day, 24-hour clock
+      describe "%k" do
+        it "handles blank padded results" do
+          format = "%d.%m.%Y %k:%M"
+          string = "03.04.2025  4:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">4</span><span class="sep">:</span><span class="minutes M">30</span>'
+        end
+
+        it "handles non blank padded results" do
+          format = "%d.%m.%Y %k:%M"
+          string = "03.04.2025 10:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">10</span><span class="sep">:</span><span class="minutes M">30</span>'
+        end
+      end
+
+      # Hour of the day, 12-hour clock
+      describe "%l" do
+        it "handles blank padded results" do
+          format = "%d.%m.%Y %l.%M %P"
+          string = "03.04.2025  8.30 pm"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">8</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep"> </span><span class="ampm P">pm</span>'
+        end
+
+        it "handles non blank padded results" do
+          format = "%d.%m.%Y %l.%M %P"
+          string = "03.04.2025 10.30 am"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">10</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep"> </span><span class="ampm P">am</span>'
+        end
       end
     end
   end
