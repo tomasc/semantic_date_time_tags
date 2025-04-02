@@ -54,6 +54,8 @@ module SemanticDateTimeTags
         when /%-?[HKIl]/ then [ "hours", comp[/[[:word:]]/] ]
         when /%-?[M]/ then [ "minutes", comp[/[[:word:]]/] ]
         when /%-?[pP]/ then [ "ampm", comp[/[[:word:]]/] ]
+        when /%-?[Ss]/ then [ "seconds", comp[/[[:word:]]/] ]
+        when /%-?[L]/ then [ "milliseconds", comp[/[[:word:]]/] ]
         when /\W+/ then [ "sep" ]
         end
       end
