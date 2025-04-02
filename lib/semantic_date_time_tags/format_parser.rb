@@ -41,7 +41,7 @@ module SemanticDateTimeTags
 
       def get_regexp_for_component(comp)
         case comp
-        when /%-?[ekl]/ then "\\s([[:word:]]+)"
+        when /%-?[ekl]/ then "\\s?([[:word:]]+)"
         when /%-?[[:word:]]/ then "([[:word:]]+)"
         else "(#{comp})"
         end

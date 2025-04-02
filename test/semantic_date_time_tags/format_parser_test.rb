@@ -81,23 +81,50 @@ describe SemanticDateTimeTags::FormatParser do
     end
 
     describe "blank padded formats" do
-      it "handles %e" do
-        format = "%a, %e %b, %Y %H:%M"
-        string = "Thu,  3 Apr, 2025 20:30"
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
+      # Day of the month (1..31)
+      describe "%e" do
+        it "handles blank paddded results" do
+          format = "%a, %e %b, %Y %H:%M"
+          string = "Thu,  3 Apr, 2025 20:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
+        end
+
+        it "handles non blank padded results" do
+          date = Date.new(2025, 4, 30)
+          format = "%e %b, %Y"
+          string = I18n.localize(date, format: format)
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day e">30</span><span class="sep"> </span><span class="month b">Apr</span><span class="sep">, </span><span class="year Y">2025</span>'
+        end
       end
 
-      it "handles %k" do
-        format = "%d.%m.%Y %k:%M"
-        string = "03.04.2025  4:30"
-        pp I18n.localize(DateTime.new(2025, 4, 3, 4, 30), format: format)
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">4</span><span class="sep">:</span><span class="minutes M">30</span>'
+      # Hour of the day, 24-hour clock
+      describe "%k" do
+        it "handles blank padded results" do
+          format = "%d.%m.%Y %k:%M"
+          string = "03.04.2025  4:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">4</span><span class="sep">:</span><span class="minutes M">30</span>'
+        end
+
+        it "handles non blank padded results" do
+          format = "%d.%m.%Y %k:%M"
+          string = "03.04.2025 10:30"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">10</span><span class="sep">:</span><span class="minutes M">30</span>'
+        end
       end
 
-      it "handles %l" do
-        format = "%d.%m.%Y %l:%M"
-        string = "03.04.2025  8:30"
-        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">8</span><span class="sep">:</span><span class="minutes M">30</span>'
+      # Hour of the day, 12-hour clock
+      describe "%l" do
+        it "handles blank padded results" do
+          format = "%d.%m.%Y %l.%M %P"
+          string = "03.04.2025  8.30 pm"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">8</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep"> </span><span class="ampm P">pm</span>'
+        end
+
+        it "handles non blank padded results" do
+          format = "%d.%m.%Y %l.%M %P"
+          string = "03.04.2025 10.30 am"
+          _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">10</span><span class="sep">.</span><span class="minutes M">30</span><span class="sep"> </span><span class="ampm P">am</span>'
+        end
       end
     end
   end
