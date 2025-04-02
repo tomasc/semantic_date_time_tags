@@ -41,7 +41,7 @@ module SemanticDateTimeTags
 
       def get_regexp_for_component(comp)
         case comp
-        when /%e/ then "\s([[:word:]]+)"
+        when /%-?[ekl]/ then "\\s([[:word:]]+)"
         when /%-?[[:word:]]/ then "([[:word:]]+)"
         else "(#{comp})"
         end
@@ -52,7 +52,7 @@ module SemanticDateTimeTags
         when /%-?[YCy]/ then [ "year", comp[/[[:word:]]/] ]
         when /%-?[mBbh]/ then [ "month", comp[/[[:word:]]/] ]
         when /%-?[aAdej]/ then [ "day", comp[/[[:word:]]/] ]
-        when /%-?[HKIl]/ then [ "hours", comp[/[[:word:]]/] ]
+        when /%-?[HkKIl]/ then [ "hours", comp[/[[:word:]]/] ]
         when /%-?[M]/ then [ "minutes", comp[/[[:word:]]/] ]
         when /%-?[pP]/ then [ "ampm", comp[/[[:word:]]/] ]
         when /\W+/ then [ "sep" ]

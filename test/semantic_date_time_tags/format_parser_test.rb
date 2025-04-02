@@ -80,10 +80,25 @@ describe SemanticDateTimeTags::FormatParser do
       end
     end
 
-    it "does not add extra 0 to the output" do
-      format = "%a, %e %b, %Y %H:%M"
-      string = "Thu,  3 Apr, 2025 20:30"
-      _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
+    describe "blank padded formats" do
+      it "handles %e" do
+        format = "%a, %e %b, %Y %H:%M"
+        string = "Thu,  3 Apr, 2025 20:30"
+        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).wont_match(/\<span class\=\"str\">0\<\/span\>/)
+      end
+
+      it "handles %k" do
+        format = "%d.%m.%Y %k:%M"
+        string = "03.04.2025  4:30"
+        pp I18n.localize(DateTime.new(2025, 4, 3, 4, 30), format: format)
+        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours k">4</span><span class="sep">:</span><span class="minutes M">30</span>'
+      end
+
+      it "handles %l" do
+        format = "%d.%m.%Y %l:%M"
+        string = "03.04.2025  8:30"
+        _(SemanticDateTimeTags::FormatParser.new(format, string).to_html).must_equal '<span class="day d">03</span><span class="sep">.</span><span class="month m">04</span><span class="sep">.</span><span class="year Y">2025</span><span class="sep"> </span><span class="hours l">8</span><span class="sep">:</span><span class="minutes M">30</span>'
+      end
     end
   end
 end
