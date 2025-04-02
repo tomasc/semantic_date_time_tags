@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.2.2
+
+* update to Ruby 3.3.5
+* fix: format parser messes up blank padding formats (@asgerb)
+
 ## 0.2.1
 
 * modernize the overall setup of this gem, update to Ruby 3.3.4
