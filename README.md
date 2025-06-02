@@ -36,8 +36,6 @@ span.date_range.semantic.same_year {
 }
 ```
 
-See the included [SCSS example](/lib/assets/stylesheets/semantic_date_time_tags.css) for more.
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -56,19 +54,6 @@ Or install it yourself as:
 
 ```
 $ gem install semantic_date_time_tags
-```
-
-If you want to use the default css you can include it like this:
-```css
-/*
- *= require 'semantic_date_time_tags/default'
- */
-```
-
-Or if you like to use some of the mixins, import them like this:
-
-```scss
-@import "semantic_date_time_tags/partials/mixins";
 ```
 
 ## Usage

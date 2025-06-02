@@ -10,7 +10,6 @@
 - Contextual classes (current_date, current_year, same_year, same_month)
 - I18n support for date/time formatting
 - Support for date ranges with intelligent CSS classes
-- SCSS mixins for common styling patterns
 
 ## Technical Details
 
@@ -29,8 +28,6 @@ semantic_date_time_tags/
 │   │   ├── format_parser.rb    # Parses I18n format strings into HTML
 │   │   ├── view_helpers.rb     # Rails view helper methods
 │   │   └── version.rb
-│   └── assets/
-│       └── stylesheets/        # SCSS mixins and default styles
 ├── test/                       # Test files
 └── semantic_date_time_tags.gemspec
 ```
@@ -66,11 +63,6 @@ Converts I18n date/time format strings into semantic HTML by:
 1. Update the relevant tag class (Date, Time, DateTime, or DateRange)
 2. Add the logic to the appropriate method (e.g., `dom_classes`)
 3. Add corresponding tests
-
-### Updating Styles
-1. SCSS mixins are in `lib/assets/stylesheets/semantic_date_time_tags/partials/mixins/`
-2. Default styles are in `default.scss`
-3. Follow existing patterns for hiding/showing elements based on context
 
 ## Testing Guidelines
 
@@ -112,12 +104,10 @@ Users can override by adding their own locale files with the same keys.
 1. Support for additional HTML5 time element features
 2. More comprehensive timezone handling
 3. JavaScript integration for dynamic updates
-4. Additional SCSS mixin patterns
-5. ~~Performance optimizations for format parsing~~ ✅ Completed in v0.3.1 (#40)
+4. ~~Performance optimizations for format parsing~~ ✅ Completed in v0.3.1 (#40)
 
 ## Debugging Tips
 
 - Check generated HTML structure if styling isn't working
 - Verify I18n format strings are correctly defined
-- Use `semantic_date_time_tags.css` for default styles during development
 - Inspect data attributes for format and in-words values
