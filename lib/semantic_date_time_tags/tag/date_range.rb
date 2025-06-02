@@ -20,19 +20,26 @@ module SemanticDateTimeTags
       end
 
       def spans_months?
+        return false if date_to.nil?
         date_from.month != date_to.month
       end
 
       def within_a_week?
+        return true if date_to.nil?
         (date_from - date_to) <= 7
       end
 
       def same_day?
+        return true if date_to.nil?
         date_from.to_date == date_to.to_date
       end
 
       def same_time?
-        date_from.to_time == date_to.to_time
+        return true if date_to.nil?
+        # Compare times without timezone conversion to avoid deprecation warning
+        date_from_time = date_from.respond_to?(:hour) ? [date_from.hour, date_from.min, date_from.sec] : [0, 0, 0]
+        date_to_time = date_to.respond_to?(:hour) ? [date_to.hour, date_to.min, date_to.sec] : [0, 0, 0]
+        date_from_time == date_to_time
       end
 
       def both_in_current_year?
@@ -41,6 +48,7 @@ module SemanticDateTimeTags
       end
 
       def same_meridian?
+        return true if date_to.nil?
         return false unless same_day?
         (date_from.to_datetime.hour < 12 && date_to.to_datetime.hour < 12) ||
           (date_from.to_datetime.hour >= 12 && date_to.to_datetime.hour >= 12)
@@ -63,6 +71,29 @@ module SemanticDateTimeTags
         options.fetch(:data, {})
       end
 
+      def aria_attributes
+        aria_options = options.fetch(:aria, {})
+        
+        # Add automatic aria-label if not provided
+        if aria_options[:label].nil? && options[:aria_label] != false
+          aria_options[:label] = automatic_aria_label
+        end
+        
+        # Convert aria hash to aria-* attributes
+        aria_options.transform_keys { |key| "aria-#{key}".to_sym }
+      end
+
+      def automatic_aria_label
+        from_str = date_from.strftime('%B %-d, %Y')
+        to_str = date_to.strftime('%B %-d, %Y') if date_to
+        
+        if date_to
+          "Date range: #{from_str} to #{to_str}"
+        else
+          "Date range starting: #{from_str}"
+        end
+      end
+
       def to_html
         from_options = options.merge(class: "from").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
         from = case date_from
@@ -70,15 +101,22 @@ module SemanticDateTimeTags
         when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, from_options).to_html
         end
 
-        sep = content_tag(:span, @separator, class: "date_range_separator")
+        if date_to
+          sep = content_tag(:span, @separator, class: "date_range_separator")
 
-        to_options = options.merge(class: "to").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
-        to = case date_to
-        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, to_options).to_html
-        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, to_options).to_html
+          to_options = options.merge(class: "to").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
+          to = case date_to
+          when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, to_options).to_html
+          when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, to_options).to_html
+          end
         end
 
-        content_tag(:span, class: dom_classes, data: dom_data) { [ from, sep, to ].join.html_safe }.html_safe
+        tag_options = { class: dom_classes, data: dom_data }
+        tag_options.merge!(aria_attributes)
+        tag_options = tag_options.except(:aria, :aria_label)
+        
+        elements = date_to ? [ from, sep, to ] : [ from ]
+        content_tag(:span, tag_options) { elements.join.html_safe }.html_safe
       end
     end
   end
