@@ -28,7 +28,7 @@ describe SemanticDateTimeTags::ViewHelpers do
 
       it "can disable automatic aria-label" do
         output = semantic_date_tag(date, aria_label: false)
-        _(output).wont_include 'aria-label'
+        _(output).wont_include "aria-label"
       end
     end
 

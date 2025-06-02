@@ -87,12 +87,12 @@ module SemanticDateTimeTags
 
     def aria_attributes
       aria_options = options.fetch(:aria, {})
-      
+
       # Add automatic aria-label if not provided
       if aria_options[:label].nil? && options[:aria_label] != false
         aria_options[:label] = automatic_aria_label
       end
-      
+
       # Convert aria hash to aria-* attributes
       aria_options.transform_keys { |key| "aria-#{key}".to_sym }
     end
@@ -141,7 +141,7 @@ module SemanticDateTimeTags
         # Generate a descriptive aria-label based on the date/time
         case obj
         when ::DateTime
-          time_part = obj.strftime('%-l:%M %p')
+          time_part = obj.strftime("%-l:%M %p")
           "Date and time: #{obj.strftime('%A, %B %-d, %Y')} at #{time_part}"
         when ::Date
           "Date: #{obj.strftime('%A, %B %-d, %Y')}"
