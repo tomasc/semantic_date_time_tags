@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.3.0
+
+* feat: add ARIA attribute support for better accessibility (#39)
+  * automatic aria-label generation for all date/time tags
+  * support custom ARIA attributes via `aria: { label: "...", describedby: "..." }` option
+  * properly handle open-ended date ranges (nil date_to)
+* fix: Rails 8.1 deprecation warning for `to_time` method
+* fix: regex ambiguity warnings in tests
+
 ## 0.2.2
 
 * update to Ruby 3.3.5
