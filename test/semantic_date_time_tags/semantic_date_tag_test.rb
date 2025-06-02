@@ -19,6 +19,15 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(proc { semantic_date_tag(time_object) }).must_raise RuntimeError
     end
 
+    it "should return nil when passed nil" do
+      _(semantic_date_tag(nil)).must_be_nil
+    end
+
+    it "should raise error for invalid types" do
+      error = _(proc { semantic_date_tag("not a date") }).must_raise RuntimeError
+      _(error.message).must_equal "object must be Date or DateTime"
+    end
+
     it "wraps everything in a time tag by default" do
       _(semantic_date_tag(date_object)).must_match(/\A<time.+?<\/time>\z/)
     end

@@ -18,6 +18,15 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:time_object_whole_hour) { Time.new(2014, 8, 21, 15) }
     let(:time_object_whole_minute) { Time.new(2014, 8, 21, 15, 30) }
     let(:time_object_before_noon) { Time.new(2014, 8, 21, 11, 00) }
+
+    it "should return nil when passed nil" do
+      _(semantic_time_tag(nil)).must_be_nil
+    end
+
+    it "should raise error for invalid types" do
+      error = _(proc { semantic_time_tag("not a time") }).must_raise RuntimeError
+      _(error.message).must_equal "object must be Time"
+    end
     let(:time_object_after_noon) { Time.new(2014, 8, 21, 12, 01) }
 
     it "does not work with a date object" do

@@ -17,6 +17,16 @@ describe SemanticDateTimeTags::ViewHelpers do
     let(:date_time_object_from_morning) { DateTime.parse("14/11/#{Date.today.year} 11:00") }
     let(:date_time_object_to_afternoon) { DateTime.parse("14/11/#{Date.today.year} 15:00") }
 
+    it "should return nil when from date is nil" do
+      _(semantic_date_range_tag(nil, date_time_object_to)).must_be_nil
+    end
+
+    it "should handle nil to date gracefully" do
+      result = semantic_date_range_tag(date_time_object_from, nil)
+      _(result).wont_be_nil
+      _(result).must_match(/class="date_range/)
+    end
+
     it "returns the from date wrapped correctly" do
       _(semantic_date_range_tag(date_object, date_tomorrow_object)).must_match(/<time.+?semantic.+?date.+?from.+?>.+?<time.+?semantic.+?date.+?to.+?>/)
     end
