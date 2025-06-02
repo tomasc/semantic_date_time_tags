@@ -37,8 +37,8 @@ module SemanticDateTimeTags
       def same_time?
         return true if date_to.nil?
         # Compare times without timezone conversion to avoid deprecation warning
-        date_from_time = date_from.respond_to?(:hour) ? [date_from.hour, date_from.min, date_from.sec] : [0, 0, 0]
-        date_to_time = date_to.respond_to?(:hour) ? [date_to.hour, date_to.min, date_to.sec] : [0, 0, 0]
+        date_from_time = date_from.respond_to?(:hour) ? [ date_from.hour, date_from.min, date_from.sec ] : [ 0, 0, 0 ]
+        date_to_time = date_to.respond_to?(:hour) ? [ date_to.hour, date_to.min, date_to.sec ] : [ 0, 0, 0 ]
         date_from_time == date_to_time
       end
 
@@ -73,20 +73,20 @@ module SemanticDateTimeTags
 
       def aria_attributes
         aria_options = options.fetch(:aria, {})
-        
+
         # Add automatic aria-label if not provided
         if aria_options[:label].nil? && options[:aria_label] != false
           aria_options[:label] = automatic_aria_label
         end
-        
+
         # Convert aria hash to aria-* attributes
         aria_options.transform_keys { |key| "aria-#{key}".to_sym }
       end
 
       def automatic_aria_label
-        from_str = date_from.strftime('%B %-d, %Y')
-        to_str = date_to.strftime('%B %-d, %Y') if date_to
-        
+        from_str = date_from.strftime("%B %-d, %Y")
+        to_str = date_to.strftime("%B %-d, %Y") if date_to
+
         if date_to
           "Date range: #{from_str} to #{to_str}"
         else
@@ -114,7 +114,7 @@ module SemanticDateTimeTags
         tag_options = { class: dom_classes, data: dom_data }
         tag_options.merge!(aria_attributes)
         tag_options = tag_options.except(:aria, :aria_label)
-        
+
         elements = date_to ? [ from, sep, to ] : [ from ]
         content_tag(:span, tag_options) { elements.join.html_safe }.html_safe
       end
