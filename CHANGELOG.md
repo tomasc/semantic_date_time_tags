@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.4.0
+
+* BREAKING: Remove all SCSS/CSS stylesheets from gem (#41)
+  * Gem now purely focuses on generating semantic HTML markup
+  * Users have complete control over styling without opinionated defaults
+  * All CSS classes remain unchanged for backward compatibility
+* docs: Add missing `semantic_time_tag` documentation
+* docs: Document ARIA attributes support
+* docs: Document seconds/milliseconds format support
+
 ## 0.3.1
 
 * feat: significant performance optimizations for FormatParser (#40)
