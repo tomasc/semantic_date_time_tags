@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.3.1
+
+* feat: significant performance optimizations for FormatParser (#40)
+  * 40-50% faster parsing through regex and component caching
+  * minimal memory footprint (~1.5KB cache)
+  * no API changes or breaking changes
+
 ## 0.3.0
 
 * feat: add ARIA attribute support for better accessibility (#39)

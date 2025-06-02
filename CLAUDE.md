@@ -113,7 +113,7 @@ Users can override by adding their own locale files with the same keys.
 2. More comprehensive timezone handling
 3. JavaScript integration for dynamic updates
 4. Additional SCSS mixin patterns
-5. Performance optimizations for format parsing
+5. ~~Performance optimizations for format parsing~~ ✅ Completed in v0.3.1 (#40)
 
 ## Debugging Tips
 
