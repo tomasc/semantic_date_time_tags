@@ -19,10 +19,11 @@ module SemanticDateTimeTags
 
         options[:class] = dom_classes
         options[:data] = dom_data
+        options.merge!(aria_attributes)
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
 
-        time_tag(obj, options.except(*%i[format])) { value }.html_safe
+        time_tag(obj, options.except(*%i[format aria aria_label])) { value }.html_safe
       end
 
       private

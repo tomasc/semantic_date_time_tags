@@ -64,8 +64,8 @@ describe SemanticDateTimeTags::ViewHelpers do
     end
 
     it "allows to pass data attributes as a Hash" do
-      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, data: { name: "value" })).must_match /\<span.+?data-name="value".+?\>/
-      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, time_data: { time_name: "time value" })).must_match /\<time.+?data-time-name="time value".+?\>/
+      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, data: { name: "value" })).must_match(/\<span.+?data-name="value".+?\>/)
+      _(semantic_date_time_range_tag(date_object, date_tomorrow_object, time_data: { time_name: "time value" })).must_match(/\<time.+?data-time-name="time value".+?\>/)
     end
   end
 end
