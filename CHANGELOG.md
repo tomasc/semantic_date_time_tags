@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.4.1
+
+* feat: add nil handling to all view helpers (#43, fixes #6)
+  * `semantic_date_tag(nil)` now returns `nil` instead of raising error
+  * `semantic_time_tag(nil)` now returns `nil` instead of raising error
+  * `semantic_date_time_tag(nil)` now returns `nil` instead of raising error
+  * `semantic_date_range_tag(nil, ...)` now returns `nil` instead of raising error
+  * maintains existing validation for invalid object types
+  * comprehensive test coverage for nil handling behavior
+
 ## 0.4.0
 
 * BREAKING: Remove all SCSS/CSS stylesheets from gem (#41)
