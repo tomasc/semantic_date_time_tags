@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* perf: eliminate per-iteration substring allocation in `FormatParser#to_html` by passing `offset` to `Regexp#match` instead of slicing `str[offset..-1]`. Saves ~1 MB of allocations per request on pages with many date tags
+* perf: memoize `Tag#dom_classes` on the instance — the result is deterministic for a given tag instance, no need to rebuild the 11-element array on every read
+
 ## 0.4.1
 
 * feat: add nil handling to all view helpers (#43, fixes #6)
