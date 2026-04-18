@@ -31,15 +31,18 @@ module SemanticDateTimeTags
 
       components.flatten.each do |comp|
         regexp = get_cached_regexp_for_component(comp)
-        if match = str[offset..-1].match(regexp)
+        # Pass offset to Regexp#match instead of slicing str[offset..-1] —
+        # slicing allocates a new String per iteration; matching with an
+        # offset starts at that position in place.
+        if match = regexp.match(str, offset)
           html_parts << get_tag_for_match(match[1], comp)
-          offset += match.end(0)
+          offset = match.end(0)
         end
       end
 
       # Add any remaining string
       if offset < str.length
-        html_parts << get_tag_for_str(str[offset..-1])
+        html_parts << get_tag_for_str(str[offset..])
       end
 
       html_parts.join.html_safe

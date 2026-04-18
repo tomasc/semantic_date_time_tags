@@ -19,7 +19,7 @@ module SemanticDateTimeTags
     end
 
     def dom_classes
-      [
+      @dom_classes ||= [
         "semantic",
         locale_class,
         am_pm_class,
