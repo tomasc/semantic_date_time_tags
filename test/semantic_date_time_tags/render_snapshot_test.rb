@@ -11,9 +11,10 @@ describe "render snapshot" do
   include ActiveSupport::Testing::TimeHelpers
   include SemanticDateTimeTags::ViewHelpers
 
-  SNAPSHOT_PATH = File.expand_path("../fixtures/render_snapshot.yml", __dir__)
-
-  NOW = Time.utc(2026, 10, 8, 9, 30)
+  # Midday from UTC-9 to UTC+14, so `Date.today` is the same on any machine,
+  # while in Honolulu (`Date.current` under its Time.zone) it is still the 7th.
+  now = Time.utc(2026, 10, 8, 9, 30)
+  snapshot_path = File.expand_path("../fixtures/render_snapshot.yml", __dir__)
 
   date = Date.new(2026, 10, 8)
   other_date = Date.new(2025, 2, 3)
@@ -23,7 +24,7 @@ describe "render snapshot" do
   morning = DateTime.new(2026, 10, 8, 9, 5)
   time = Time.utc(2026, 10, 8, 18, 0)
 
-  CASES = {
+  cases = {
     "date / full" => -> { semantic_date_tag(date) },
     "date / test" => -> { semantic_date_tag(other_date, format: :test) },
     "date / string format with words" => -> { semantic_date_tag(date, format: "%A, %B %-d, %Y") },
@@ -49,6 +50,9 @@ describe "render snapshot" do
     "range / date times same day" => -> { semantic_date_range_tag(morning, afternoon) },
     "range / date times across days" => -> { semantic_date_range_tag(noon, midnight, separator: " to ", format: :test) },
     "range / data and time_data" => -> { semantic_date_range_tag(date, date + 1, data: { a: 1 }, time_data: { b: 2 }) },
+    "range / dates in a zone a day behind" => -> { Time.use_zone("Pacific/Honolulu") { semantic_date_range_tag(date - 1, date) } },
+    "range / date times in a zone a day behind" => -> { Time.use_zone("Pacific/Honolulu") { semantic_date_range_tag(noon - 1, noon) } },
+    "date / in a zone a day behind" => -> { Time.use_zone("Pacific/Honolulu") { semantic_date_tag(date - 1) } },
 
     "parser / trailing remainder" => -> { SemanticDateTimeTags::FormatParser.new("%Y", "2026 and more").to_html },
     "parser / unmatched literal" => -> { SemanticDateTimeTags::FormatParser.new("%Y-%m", "2026/10").to_html },
@@ -58,22 +62,24 @@ describe "render snapshot" do
     "parser / blank" => -> { SemanticDateTimeTags::FormatParser.new("%Y", "").to_html }
   }.freeze
 
-  def rendered
-    travel_to(NOW) { CASES.transform_values { |c| instance_exec(&c).to_s } }
+  # Locals rather than constants: a constant assigned in a `describe` block
+  # lands on Object, shared with every other test file.
+  define_method(:rendered) do
+    travel_to(now) { cases.transform_values { |c| instance_exec(&c).to_s } }
   end
 
   if ENV["UPDATE_SNAPSHOTS"]
     it "writes the snapshot" do
-      File.write(SNAPSHOT_PATH, rendered.to_yaml(line_width: -1))
+      File.write(snapshot_path, rendered.to_yaml(line_width: -1))
     end
   else
-    snapshot = YAML.load_file(SNAPSHOT_PATH)
+    snapshot = YAML.load_file(snapshot_path)
 
     it "covers exactly the snapshotted cases" do
-      _(CASES.keys).must_equal snapshot.keys
+      _(cases.keys).must_equal snapshot.keys
     end
 
-    CASES.each_key do |name|
+    cases.each_key do |name|
       it "renders #{name} unchanged" do
         _(rendered.fetch(name)).must_equal snapshot.fetch(name)
       end

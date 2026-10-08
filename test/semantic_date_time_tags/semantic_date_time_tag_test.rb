@@ -23,6 +23,15 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_date_time_tag(nil)).must_be_nil
     end
 
+    it "raises on a missing format when the I18n exception handler raises" do
+      handler = I18n.exception_handler
+      I18n.exception_handler = ->(exception, *) { raise exception.respond_to?(:to_exception) ? exception.to_exception : exception }
+
+      _(proc { semantic_date_time_tag(date_time_object, format: :missing) }).must_raise I18n::MissingTranslationData
+    ensure
+      I18n.exception_handler = handler
+    end
+
     it "should raise error for invalid types" do
       error = _(proc { semantic_date_time_tag("not a datetime") }).must_raise RuntimeError
       _(error.message).must_equal "object must be DateTime"
