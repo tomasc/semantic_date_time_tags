@@ -44,7 +44,7 @@ module SemanticDateTimeTags
 
       def both_in_current_year?
         return false if spans_years?
-        date_from.year == today.year
+        date_from.year == current_date.year
       end
 
       def same_meridian?
@@ -121,7 +121,6 @@ module SemanticDateTimeTags
           end
           return unless tag
 
-          tag.today = today
           tag.current_date = current_date
           tag.to_html
         end

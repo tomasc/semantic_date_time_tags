@@ -47,7 +47,7 @@ module SemanticDateTimeTags
 
     def current_year_class
       return unless date_like?
-      "current_year" if obj.year == today.year
+      "current_year" if obj.year == current_date.year
     end
 
     def whole_hour_class
@@ -98,14 +98,10 @@ module SemanticDateTimeTags
     end
 
     protected
-      # Read once per tag, and handed down by a range to the tags it renders,
-      # so one render reads the clock once. `today` is the system date and
-      # `current_date` the application time zone's, which `Date#today?` reads.
-      attr_writer :today, :current_date
-
-      def today
-        @today ||= ::Date.today
-      end
+      # The application time zone's date, read once per tag and handed down
+      # by a range to the tags it renders, so `current_date` and
+      # `current_year` always agree within one render.
+      attr_writer :current_date
 
       def current_date
         @current_date ||= ::Date.current
