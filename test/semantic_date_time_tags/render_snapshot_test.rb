@@ -64,13 +64,13 @@ describe "render snapshot" do
 
   # Locals rather than constants: a constant assigned in a `describe` block
   # lands on Object, shared with every other test file.
-  define_method(:rendered) do
-    travel_to(now) { cases.transform_values { |c| instance_exec(&c).to_s } }
+  define_method(:render_case) do |name|
+    travel_to(now) { instance_exec(&cases.fetch(name)).to_s }
   end
 
   if ENV["UPDATE_SNAPSHOTS"]
     it "writes the snapshot" do
-      File.write(snapshot_path, rendered.to_yaml(line_width: -1))
+      File.write(snapshot_path, cases.keys.to_h { |name| [ name, render_case(name) ] }.to_yaml(line_width: -1))
     end
   else
     snapshot = YAML.load_file(snapshot_path)
@@ -81,7 +81,7 @@ describe "render snapshot" do
 
     cases.each_key do |name|
       it "renders #{name} unchanged" do
-        _(rendered.fetch(name)).must_equal snapshot.fetch(name)
+        _(render_case(name)).must_equal snapshot.fetch(name)
       end
     end
   end

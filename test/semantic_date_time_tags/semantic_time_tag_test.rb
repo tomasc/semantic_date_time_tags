@@ -23,6 +23,10 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_time_tag(nil)).must_be_nil
     end
 
+    it "raises on a missing format" do
+      _(proc { semantic_time_tag(time_object, format: :missing) }).must_raise I18n::MissingTranslationData
+    end
+
     it "should raise error for invalid types" do
       error = _(proc { semantic_time_tag("not a time") }).must_raise RuntimeError
       _(error.message).must_equal "object must be Time"
