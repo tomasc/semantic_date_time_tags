@@ -24,8 +24,10 @@ module SemanticDateTimeTags
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html
 
         # What `time_tag` renders, without the `I18n.l(obj, format: :long)` it
-        # computes as content and then discards for the block.
-        content_tag(:time, options.except(*%i[format aria aria_label]).reverse_merge(datetime: obj.iso8601)) { value }
+        # computes as content and then discards for the block. `datetime` stays
+        # the first attribute, as `time_tag`'s `reverse_merge` put it.
+        attrs = options.except(*%i[format aria aria_label])
+        content_tag(:time, { datetime: attrs.fetch(:datetime) { obj.iso8601 } }.merge(attrs)) { value }
       end
 
       private

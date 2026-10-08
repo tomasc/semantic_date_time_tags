@@ -1,10 +1,12 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require "active_support/core_ext/string/output_safety"
+require "action_view/helpers/tag_helper"
 
 module SemanticDateTimeTags
   class FormatParser < Struct.new(:format, :str)
+    include ActionView::Helpers::TagHelper
+
     # Class-level caches
     COMPONENT_REGEX_CACHE = {}
     COMPONENT_CLASSES_CACHE = {}

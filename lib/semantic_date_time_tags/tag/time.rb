@@ -27,6 +27,12 @@ module SemanticDateTimeTags
         def scope
           "time.formats"
         end
+
+        # `I18n.l` resolves a symbol through the same `time.formats` key, so
+        # reuse the lookup; a missing one still raises through `super`.
+        def localized_obj
+          format_string.nil? ? super : I18n.l(obj, format: format_string)
+        end
     end
   end
 end
