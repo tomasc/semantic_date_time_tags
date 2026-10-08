@@ -2,7 +2,12 @@
 
 # Per-render cost of the tags as an event list row renders them.
 #   bundle exec ruby benchmark/render_benchmark.rb
-require_relative "../test/test_helper"
+require "action_view"
+require "action_view/helpers"
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "semantic_date_time_tags"
+
+I18n.backend.send(:init_translations)
 
 include SemanticDateTimeTags::ViewHelpers
 

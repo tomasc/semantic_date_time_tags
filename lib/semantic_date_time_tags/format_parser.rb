@@ -1,16 +1,18 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require "action_view/helpers/tag_helper"
+require "active_support/core_ext/string/output_safety"
 
 module SemanticDateTimeTags
   class FormatParser < Struct.new(:format, :str)
-    include ActionView::Helpers::TagHelper
-
     # Class-level caches
     COMPONENT_REGEX_CACHE = {}
     COMPONENT_CLASSES_CACHE = {}
+    COMPONENT_OPEN_TAG_CACHE = {}
     FORMAT_COMPONENTS_CACHE = {}
+
+    STR_OPEN_TAG = %(<span class="str">)
+    CLOSE_TAG = "</span>"
 
     # Pre-compiled regex patterns for common components
     COMPONENT_PATTERNS = {
@@ -26,26 +28,30 @@ module SemanticDateTimeTags
       components = formatting_components
       return "" unless components.present?
 
-      html_parts = []
+      # The spans are concatenated rather than built with `content_tag`: the
+      # opening tag is precomputed per component, so only the matched text is
+      # escaped per render (#3094 in tomasc/modulor).
+      html = +""
       offset = 0
 
-      components.flatten.each do |comp|
+      components.each do |comp|
         regexp = get_cached_regexp_for_component(comp)
         # Pass offset to Regexp#match instead of slicing str[offset..-1] —
         # slicing allocates a new String per iteration; matching with an
         # offset starts at that position in place.
         if match = regexp.match(str, offset)
-          html_parts << get_tag_for_match(match[1], comp)
+          append_span(html, get_cached_open_tag_for_component(comp), match[1])
           offset = match.end(0)
         end
       end
 
       # Add any remaining string
       if offset < str.length
-        html_parts << get_tag_for_str(str[offset..])
+        rest = str[offset..]
+        append_span(html, STR_OPEN_TAG, rest) if rest.present?
       end
 
-      html_parts.join.html_safe
+      html.html_safe
     end
 
     private
@@ -57,7 +63,7 @@ module SemanticDateTimeTags
         return cached if cached
 
         # Parse and cache the components
-        components = format.scan(/(%-?[[:word:]]|.+?(?=%))/)
+        components = format.scan(/(%-?[[:word:]]|.+?(?=%))/).flatten.freeze
 
         # Limit cache size to prevent memory bloat
         if FORMAT_COMPONENTS_CACHE.size >= MAX_FORMAT_CACHE_SIZE
@@ -69,13 +75,16 @@ module SemanticDateTimeTags
         components
       end
 
-      def get_tag_for_match(match, comp)
-        content_tag :span, match, class: get_cached_classes_for_component(comp)
+      # Escapes exactly as `content_tag` does: html_safe text passes through.
+      def append_span(html, open_tag, text)
+        html << open_tag << ERB::Util.unwrapped_html_escape(text) << CLOSE_TAG
       end
 
-      def get_tag_for_str(str)
-        return "" unless str.present?
-        content_tag :span, str, class: "str"
+      def get_cached_open_tag_for_component(comp)
+        COMPONENT_OPEN_TAG_CACHE[comp] ||= begin
+          classes = get_cached_classes_for_component(comp)
+          classes ? %(<span class="#{ERB::Util.html_escape(classes.join(" "))}">).freeze : "<span>"
+        end
       end
 
       def get_cached_regexp_for_component(comp)

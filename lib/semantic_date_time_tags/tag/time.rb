@@ -20,7 +20,7 @@ module SemanticDateTimeTags
 
         value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html
 
-        content_tag(tag_name, options.except(*%i[format aria aria_label])) { value }.html_safe
+        content_tag(tag_name, options.except(*%i[format aria aria_label])) { value }
       end
 
       private
