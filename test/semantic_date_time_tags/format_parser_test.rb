@@ -148,4 +148,21 @@ describe SemanticDateTimeTags::FormatParser do
       end
     end
   end
+
+  describe "the format cache" do
+    let(:parser) { SemanticDateTimeTags::FormatParser }
+
+    it "keeps at most MAX_FORMAT_CACHE_SIZE formats however many are rendered" do
+      (parser::MAX_FORMAT_CACHE_SIZE + 20).times do |i|
+        venue = "venue #{i}"
+        _(parser.new("#{venue}: %Y", "#{venue}: 2026").to_html).must_include "<span class=\"sep\">#{venue}: </span>"
+      end
+
+      _(parser::FORMAT_COMPONENTS_CACHE.size).must_be :<=, parser::MAX_FORMAT_CACHE_SIZE
+    end
+
+    it "keeps nothing per component outside it" do
+      _(parser.constants.grep(/_CACHE\z/)).must_equal [ :FORMAT_COMPONENTS_CACHE ]
+    end
+  end
 end
