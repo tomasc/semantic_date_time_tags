@@ -2,13 +2,13 @@
 
 ## Unreleased
 
-* perf: about half the per-render cost, with byte-identical HTML pinned by a render snapshot test (tomasc/modulor#3094). A date-time range goes from ~155 µs and 729 allocations to ~75 µs and 321
+* perf: about half the per-render cost, with byte-identical HTML pinned by a render snapshot test (tomasc/modulor#3094). A date-time range goes from ~155 µs and 729 allocations to ~78 µs and 321
   * `FormatParser#to_html` concatenates the part spans instead of calling `content_tag` per part: the opening tag is precomputed per format component and only the matched text is escaped
   * `Tag::DateTime` renders its `<time>` with `content_tag`; `time_tag` also computed an `I18n.l(obj, format: :long)` it then discarded for the block
   * `Tag::DateTime` looks its format up once instead of twice
   * the clock is read once per render: a range hands `today` / `current_date` to the tags it renders
-  * `noon` / `midnight` are compared once per tag, not twice; `type_class` is cached per class; `dom_classes` runs `blank?` only on the caller's `class:`
-  * `Tag::DateTime` with a missing format no longer calls `I18n.l` for content it never rendered, so a format missing from `time.formats.default` no longer raises
+  * `noon` / `midnight` are compared once per tag, not twice; `type_class` reads a frozen map
+* chore: `benchmark/` is no longer packaged in the gem
 
 ## 0.5.0
 

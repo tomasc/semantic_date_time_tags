@@ -8,9 +8,8 @@ module SemanticDateTimeTags
     attr_accessor :obj
     attr_accessor :options
     attr_accessor :output_buffer
-    attr_writer :today, :current_date
 
-    TYPE_CLASS_CACHE = {}
+    TYPE_CLASSES = { ::Date => "date", ::DateTime => "date_time", ::Time => "time" }.freeze
 
     def initialize(obj, options = {})
       @obj = obj
@@ -22,40 +21,23 @@ module SemanticDateTimeTags
     end
 
     def dom_classes
-      @dom_classes ||= begin
-        classes = [
-          "semantic",
-          locale_class,
-          am_pm_class,
-          type_class,
-          current_date_class,
-          current_year_class,
-          midnight_class,
-          noon_class,
-          whole_hour_class,
-          whole_minute_class
-        ]
-        classes.compact!
-        # Only the caller's classes can be blank: `blank?` is a regexp match
-        # per string, so the generated ones skip it.
-        classes.concat([ options[:class] ].flatten.reject(&:blank?)) unless options[:class].nil?
-        classes
-      end
+      @dom_classes ||= [
+        "semantic",
+        locale_class,
+        am_pm_class,
+        type_class,
+        current_date_class,
+        current_year_class,
+        midnight_class,
+        noon_class,
+        whole_hour_class,
+        whole_minute_class,
+        options[:class]
+      ].flatten.reject(&:blank?)
     end
 
     def type_class
-      TYPE_CLASS_CACHE[obj.class] ||= obj.class.to_s.underscore.freeze
-    end
-
-    # Read once per tag, and handed down by a range to the tags it renders,
-    # so one render reads the clock once. `today` is the system date and
-    # `current_date` the application time zone's, which `Date#today?` reads.
-    def today
-      @today ||= ::Date.today
-    end
-
-    def current_date
-      @current_date ||= ::Date.current
+      TYPE_CLASSES.fetch(obj.class) { obj.class.to_s.underscore }
     end
 
     def current_date_class
@@ -114,6 +96,20 @@ module SemanticDateTimeTags
       # Convert aria hash to aria-* attributes
       aria_options.transform_keys { |key| "aria-#{key}".to_sym }
     end
+
+    protected
+      # Read once per tag, and handed down by a range to the tags it renders,
+      # so one render reads the clock once. `today` is the system date and
+      # `current_date` the application time zone's, which `Date#today?` reads.
+      attr_writer :today, :current_date
+
+      def today
+        @today ||= ::Date.today
+      end
+
+      def current_date
+        @current_date ||= ::Date.current
+      end
 
     private
       def scope

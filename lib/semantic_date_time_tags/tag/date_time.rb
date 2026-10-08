@@ -34,10 +34,13 @@ module SemanticDateTimeTags
         end
 
         # Reuses the format `format_string` already looked up. A missing one
-        # renders nothing either way: the parser returns "" for a nil format.
+        # goes through `I18n.t` as before, so a raising exception handler
+        # still raises for it.
         def localized_obj
-          return "" if format_string.nil?
-          I18n.l(obj, format: format_string)
+          return I18n.l(obj, format: format_string) unless format_string.nil?
+
+          missing = format.is_a?(Symbol) ? I18n.t(format, scope: scope, locale: I18n.locale) : format
+          I18n.l(obj, format: missing)
         end
     end
   end
