@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.6.0
 
 * perf: about half the per-render cost, with byte-identical HTML pinned by a render snapshot test (tomasc/modulor#3094). A date-time range goes from ~155 µs and 729 allocations to ~78 µs and 317 allocations
   * `FormatParser#to_html` concatenates the part spans instead of calling `content_tag` per part: the opening tag is precomputed per format component and only the matched text is escaped
