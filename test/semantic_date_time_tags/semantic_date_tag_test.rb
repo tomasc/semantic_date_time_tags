@@ -23,6 +23,20 @@ describe SemanticDateTimeTags::ViewHelpers do
       _(semantic_date_tag(nil)).must_be_nil
     end
 
+    it "renders a DateTime's date parts with the date format" do
+      date_time = DateTime.new(2026, 10, 8, 15, 45)
+      html = semantic_date_tag(date_time)
+
+      _(html).must_include %(<span class="day d">8</span>)
+      _(html).must_include %(<span class="month m">10</span>)
+      _(html).must_include %(<span class="year Y">2026</span>)
+      _(html).wont_include ">15<"
+    end
+
+    it "raises on a missing format" do
+      _(proc { semantic_date_tag(date_object, format: :missing) }).must_raise I18n::MissingTranslationData
+    end
+
     it "should raise error for invalid types" do
       error = _(proc { semantic_date_tag("not a date") }).must_raise RuntimeError
       _(error.message).must_equal "object must be Date or DateTime"

@@ -30,6 +30,14 @@ module SemanticDateTimeTags
         def scope
           "date.formats"
         end
+
+        # Localizes with the format the parser reads. Given a symbol, `I18n.l`
+        # picks `time.formats` for a DateTime (it responds to `sec`), which
+        # put the hour where the parser expects the day. A missing format
+        # still raises through `super`.
+        def localized_obj
+          format_string.nil? ? super : I18n.l(obj, format: format_string)
+        end
     end
   end
 end
