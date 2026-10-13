@@ -9,6 +9,8 @@
   * the clock is read once per render: a range hands `today` / `current_date` to the tags it renders
   * `noon` / `midnight` are compared once per tag, not twice; `type_class` reads a frozen map
 * chore: `benchmark/` is no longer packaged in the gem
+* fix: `FormatParser` keeps one capped cache, of each format's compiled components, instead of three per-component caches with no bound. A format built at runtime (an interpolated venue name, say) grew those for the life of the process. `COMPONENT_REGEX_CACHE` and `COMPONENT_CLASSES_CACHE` are gone; `FORMAT_COMPONENTS_CACHE` now holds `[regexp, opening tag]` pairs
+* chore: remove `benchmark/format_parser_benchmark.rb` and `benchmark/final_comparison.rb`, which read the removed caches and no longer ran on Ruby 4; `benchmark/render_benchmark.rb` replaces them
 
 ## 0.5.0
 

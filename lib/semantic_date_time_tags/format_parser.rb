@@ -7,10 +7,9 @@ module SemanticDateTimeTags
   class FormatParser < Struct.new(:format, :str)
     include ActionView::Helpers::TagHelper
 
-    # Class-level caches
-    COMPONENT_REGEX_CACHE = {}
-    COMPONENT_CLASSES_CACHE = {}
-    COMPONENT_OPEN_TAG_CACHE = {}
+    # Each format's compiled components — `[regexp, opening tag]` pairs — keyed
+    # by the format string and capped, so formats built at runtime (an
+    # interpolated venue name, say) cannot grow it for the life of the process.
     FORMAT_COMPONENTS_CACHE = {}
 
     STR_OPEN_TAG = %(<span class="str">)
@@ -36,13 +35,12 @@ module SemanticDateTimeTags
       html = +""
       offset = 0
 
-      components.each do |comp|
-        regexp = get_cached_regexp_for_component(comp)
+      components.each do |regexp, open_tag|
         # Pass offset to Regexp#match instead of slicing str[offset..-1] —
         # slicing allocates a new String per iteration; matching with an
         # offset starts at that position in place.
         if match = regexp.match(str, offset)
-          append_span(html, get_cached_open_tag_for_component(comp), match[1])
+          append_span(html, open_tag, match[1])
           offset = match.end(0)
         end
       end
@@ -64,8 +62,10 @@ module SemanticDateTimeTags
         cached = FORMAT_COMPONENTS_CACHE[format]
         return cached if cached
 
-        # Parse and cache the components
-        components = format.scan(/(%-?[[:word:]]|.+?(?=%))/).flatten.freeze
+        # Parse, compile and cache the components
+        components = format.scan(/(%-?[[:word:]]|.+?(?=%))/).flatten.map do |comp|
+          [ Regexp.new(get_regexp_for_component(comp)), open_tag_for_component(comp) ].freeze
+        end.freeze
 
         # Limit cache size to prevent memory bloat
         if FORMAT_COMPONENTS_CACHE.size >= MAX_FORMAT_CACHE_SIZE
@@ -82,15 +82,9 @@ module SemanticDateTimeTags
         html << open_tag << ERB::Util.unwrapped_html_escape(text) << CLOSE_TAG
       end
 
-      def get_cached_open_tag_for_component(comp)
-        COMPONENT_OPEN_TAG_CACHE[comp] ||= begin
-          classes = get_cached_classes_for_component(comp)
-          classes ? %(<span class="#{ERB::Util.html_escape(classes.join(" "))}">).freeze : "<span>"
-        end
-      end
-
-      def get_cached_regexp_for_component(comp)
-        COMPONENT_REGEX_CACHE[comp] ||= Regexp.new(get_regexp_for_component(comp))
+      def open_tag_for_component(comp)
+        classes = get_classes_for_component(comp)
+        classes ? %(<span class="#{ERB::Util.html_escape(classes.join(" "))}">).freeze : "<span>"
       end
 
       def get_regexp_for_component(comp)
@@ -98,10 +92,6 @@ module SemanticDateTimeTags
           return regex.source if comp.match?(pattern)
         end
         "(#{Regexp.escape(comp)})"
-      end
-
-      def get_cached_classes_for_component(comp)
-        COMPONENT_CLASSES_CACHE[comp] ||= get_classes_for_component(comp)
       end
 
       def get_classes_for_component(comp)
