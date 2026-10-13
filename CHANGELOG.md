@@ -12,6 +12,7 @@
 * fix: `FormatParser` keeps one capped cache, of each format's compiled components, instead of three per-component caches with no bound. A format built at runtime (an interpolated venue name, say) grew those for the life of the process. `COMPONENT_REGEX_CACHE` and `COMPONENT_CLASSES_CACHE` are gone; `FORMAT_COMPONENTS_CACHE` now holds `[regexp, opening tag]` pairs
 * chore: remove `benchmark/format_parser_benchmark.rb` and `benchmark/final_comparison.rb`, which read the removed caches and no longer ran on Ruby 4; `benchmark/render_benchmark.rb` replaces them
 * fix: `semantic_date_tag` given a DateTime renders its date. It parsed against `date.formats` but localized through `time.formats` (I18n picks those for anything with `sec`), so the default format rendered the hour as the day and the minutes as the month
+* fix: `current_year` (on a tag, and on a range) reads the application time zone's date, `Date.current`, as `current_date` already did. It read the system date, so around New Year a date could be `current_date` but not `current_year`
 
 ## 0.5.0
 
