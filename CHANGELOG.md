@@ -6,7 +6,7 @@
   * `FormatParser#to_html` concatenates the part spans instead of calling `content_tag` per part: the opening tag is precomputed per format component and only the matched text is escaped
   * `Tag::DateTime` renders its `<time>` with `content_tag`; `time_tag` also computed an `I18n.l(obj, format: :long)` it then discarded for the block
   * `Tag::DateTime` and `Tag::Time` look their format up once instead of twice
-  * the clock is read once per render: a range hands `today` / `current_date` to the tags it renders
+  * the clock is read once per render: a range hands `current_date` to the tags it renders
   * `noon` / `midnight` are compared once per tag, not twice; `type_class` reads a frozen map
 * chore: `benchmark/` is no longer packaged in the gem
 * fix: `FormatParser` keeps one capped cache, of each format's compiled components, instead of three per-component caches with no bound. A format built at runtime (an interpolated venue name, say) grew those for the life of the process. `COMPONENT_REGEX_CACHE` and `COMPONENT_CLASSES_CACHE` are gone; `FORMAT_COMPONENTS_CACHE` now holds `[regexp, opening tag]` pairs
