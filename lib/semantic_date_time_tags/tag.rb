@@ -9,6 +9,8 @@ module SemanticDateTimeTags
     attr_accessor :options
     attr_accessor :output_buffer
 
+    TYPE_CLASSES = { ::Date => "date", ::DateTime => "date_time", ::Time => "time" }.freeze
+
     def initialize(obj, options = {})
       @obj = obj
       @options = options.except(*%i[scope])
@@ -35,41 +37,39 @@ module SemanticDateTimeTags
     end
 
     def type_class
-      obj.class.to_s.underscore
+      TYPE_CLASSES.fetch(obj.class) { obj.class.to_s.underscore }
     end
 
     def current_date_class
-      return unless [ ::Date, ::DateTime ].any? { |c| obj.instance_of? c }
-      "current_date" if obj.today?
+      return unless date_like?
+      "current_date" if obj.to_date == current_date
     end
 
     def current_year_class
-      return unless [ ::Date, ::DateTime ].any? { |c| obj.instance_of? c }
-      "current_year" if obj.year == ::Date.today.year
+      return unless date_like?
+      "current_year" if obj.year == today.year
     end
 
     def whole_hour_class
-      return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
+      return unless time_like?
       "whole_hour" unless obj.min > 0
     end
 
     def whole_minute_class
-      return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
+      return unless time_like?
       "whole_minute" unless obj.sec > 0
     end
 
     def noon_class
-      return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
-      "noon" if obj == obj.noon
+      "noon" if noon?
     end
 
     def midnight_class
-      return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
-      "midnight" if obj == obj.midnight
+      "midnight" if midnight?
     end
 
     def am_pm_class
-      return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
+      return unless time_like?
       case
       when (0..11).cover?(obj.hour) then "am"
       else "pm"
@@ -97,13 +97,28 @@ module SemanticDateTimeTags
       aria_options.transform_keys { |key| "aria-#{key}".to_sym }
     end
 
+    protected
+      # Read once per tag, and handed down by a range to the tags it renders,
+      # so one render reads the clock once. `today` is the system date and
+      # `current_date` the application time zone's, which `Date#today?` reads.
+      attr_writer :today, :current_date
+
+      def today
+        @today ||= ::Date.today
+      end
+
+      def current_date
+        @current_date ||= ::Date.current
+      end
+
     private
       def scope
         raise NotImplementedError
       end
 
       def format_string
-        case format
+        return @format_string if defined?(@format_string)
+        @format_string = case format
         when Symbol then I18n.t(scope)[format]
         else format
         end
@@ -126,15 +141,33 @@ module SemanticDateTimeTags
       end
 
       def noon_in_words
-        return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
-        return unless obj == obj.noon
+        return unless noon?
         I18n.t :noon, scope: %i[time in_words]
       end
 
       def midnight_in_words
-        return unless [ ::Time, ::DateTime ].any? { |c| obj.instance_of? c }
-        return unless obj == obj.midnight
+        return unless midnight?
         I18n.t :midnight, scope: %i[time in_words]
+      end
+
+      def date_like?
+        obj.instance_of?(::Date) || obj.instance_of?(::DateTime)
+      end
+
+      def time_like?
+        obj.instance_of?(::Time) || obj.instance_of?(::DateTime)
+      end
+
+      # Each comparison builds a new object (`obj.noon` is a `change`), and
+      # both the class and the in-words text ask.
+      def noon?
+        return @noon if defined?(@noon)
+        @noon = time_like? && obj == obj.noon
+      end
+
+      def midnight?
+        return @midnight if defined?(@midnight)
+        @midnight = time_like? && obj == obj.midnight
       end
 
       def automatic_aria_label

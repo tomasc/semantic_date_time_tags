@@ -44,7 +44,7 @@ module SemanticDateTimeTags
 
       def both_in_current_year?
         return false if spans_years?
-        date_from.year == ::Date.today.year
+        date_from.year == today.year
       end
 
       def same_meridian?
@@ -96,19 +96,13 @@ module SemanticDateTimeTags
 
       def to_html
         from_options = options.merge(class: "from").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
-        from = case date_from
-        when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_from, from_options).to_html
-        when ::Date then SemanticDateTimeTags::Tag::Date.new(date_from.to_date, from_options).to_html
-        end
+        from = tag_html(date_from, from_options)
 
         if date_to
           sep = content_tag(:span, @separator, class: "date_range_separator")
 
           to_options = options.merge(class: "to").except(:data, :time_data).merge(data: options.fetch(:time_data, {}))
-          to = case date_to
-          when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(date_to, to_options).to_html
-          when ::Date then SemanticDateTimeTags::Tag::Date.new(date_to.to_date, to_options).to_html
-          end
+          to = tag_html(date_to, to_options)
         end
 
         tag_options = { class: dom_classes, data: dom_data }
@@ -116,8 +110,21 @@ module SemanticDateTimeTags
         tag_options = tag_options.except(:aria, :aria_label)
 
         elements = date_to ? [ from, sep, to ] : [ from ]
-        content_tag(:span, tag_options) { elements.join.html_safe }.html_safe
+        content_tag(:span, tag_options) { elements.join.html_safe }
       end
+
+      private
+        def tag_html(obj, tag_options)
+          tag = case obj
+          when ::DateTime then SemanticDateTimeTags::Tag::DateTime.new(obj, tag_options)
+          when ::Date then SemanticDateTimeTags::Tag::Date.new(obj.to_date, tag_options)
+          end
+          return unless tag
+
+          tag.today = today
+          tag.current_date = current_date
+          tag.to_html
+        end
     end
   end
 end

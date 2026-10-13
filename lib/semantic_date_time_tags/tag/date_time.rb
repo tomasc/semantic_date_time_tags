@@ -21,9 +21,13 @@ module SemanticDateTimeTags
         options[:data] = dom_data
         options.merge!(aria_attributes)
 
-        value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html.html_safe
+        value = SemanticDateTimeTags::FormatParser.new(format_string, localized_obj).to_html
 
-        time_tag(obj, options.except(*%i[format aria aria_label])) { value }.html_safe
+        # What `time_tag` renders, without the `I18n.l(obj, format: :long)` it
+        # computes as content and then discards for the block. `datetime` stays
+        # the first attribute, as `time_tag`'s `reverse_merge` put it.
+        attrs = options.except(*%i[format aria aria_label])
+        content_tag(:time, { datetime: attrs.fetch(:datetime) { obj.iso8601 } }.merge(attrs)) { value }
       end
 
       private
@@ -31,12 +35,14 @@ module SemanticDateTimeTags
           "date_time.formats"
         end
 
+        # Reuses the format `format_string` already looked up. A missing one
+        # goes through `I18n.t` as before, so a raising exception handler
+        # still raises for it.
         def localized_obj
-          format_string = case format
-          when Symbol then I18n.t(format, scope: scope, locale: I18n.locale)
-          else format
-          end
-          I18n.l(obj, format: format_string)
+          return I18n.l(obj, format: format_string) unless format_string.nil?
+
+          missing = format.is_a?(Symbol) ? I18n.t(format, scope: scope, locale: I18n.locale) : format
+          I18n.l(obj, format: missing)
         end
     end
   end
