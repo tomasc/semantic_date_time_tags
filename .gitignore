@@ -27,3 +27,5 @@ config/secrets.yml
 pkg/
 
 Gemfile.lock
+
+.claude/worktrees
